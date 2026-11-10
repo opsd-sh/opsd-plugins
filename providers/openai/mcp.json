@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "opsd": {
+      "type": "http",
+      "url": "https://api.opsd.sh/mcp",
+      "scopes": ["api:full"]
+    }
+  }
+}
