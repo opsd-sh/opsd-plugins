@@ -92,10 +92,18 @@ The ZIP is an initial package, not a completed public catalogue submission.
 - `list_businesses` lists standalone businesses where the user has direct membership.
 - `get_business` looks up a business by its public ID, subject to the user's access.
 
-Both tools read data. OAuth currently requests `api:full`, which grants the
-user's existing REST and MCP access. The listing's Read capability describes the
-tools; it does not restrict the token to read-only access. OAuth endpoints and
-CIMD support are discovered from Opserver; credentials are not packaged.
+Both tools read data. OAuth requests `api:read`, `api:write`, and `hmrc:submit`.
+On the consent page, the user can approve any nonempty subset of these independent
+permissions. The two current tools require `api:read`; granting only write or
+submission permission does not allow these lookups. Opserver enforces the granted
+scopes alongside the user's existing membership and role permissions.
+
+The listing's Read capability describes the available tools; it does not restrict
+the token to read-only access. OAuth endpoints and CIMD support are discovered
+from Opserver; credentials are not packaged.
+
+This configuration requires the Opserver and consent-page changes for these
+scopes. Deploy those changes before testing a new connection.
 
 The icon is the existing Opsd favicon from `www/public/favicon.svg`.
 

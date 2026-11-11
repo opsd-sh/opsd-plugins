@@ -3,7 +3,7 @@
     "opsd": {
       "type": "http",
       "url": "https://api.opsd.sh/mcp",
-      "scopes": ["api:full"]
+      "scopes": ["api:read", "api:write", "hmrc:submit"]
     }
   }
 }

@@ -49,6 +49,10 @@ class PackageTests(unittest.TestCase):
                 self.assertEqual(archive.read(name), (self.source / name).read_bytes())
             mcp = json.loads(archive.read(".mcp.json"))
             self.assertEqual(mcp["mcpServers"]["opsd"]["url"], "https://api.opsd.sh/mcp")
+            self.assertEqual(
+                mcp["mcpServers"]["opsd"]["scopes"],
+                ["api:read", "api:write", "hmrc:submit"],
+            )
             manifest = json.loads(archive.read(".codex-plugin/plugin.json"))
             self.assertEqual(manifest["skills"], "./skills/")
             self.assertEqual(manifest["name"], "opsd")
@@ -70,7 +74,10 @@ class PackageTests(unittest.TestCase):
         mcp = packager.read_json(plugin / ".mcp.json")
         self.assertEqual(set(mcp["mcpServers"]), {"opsd-test"})
         self.assertEqual(mcp["mcpServers"]["opsd-test"]["url"], config["mcp_url"])
-        self.assertEqual(mcp["mcpServers"]["opsd-test"]["scopes"], ["api:full"])
+        self.assertEqual(
+            mcp["mcpServers"]["opsd-test"]["scopes"],
+            ["api:read", "api:write", "hmrc:submit"],
+        )
         with ZipFile(self.output / "opsd-test.zip") as archive:
             self.assertEqual(json.loads(archive.read(".mcp.json")), mcp)
 
