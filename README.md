@@ -15,6 +15,7 @@ skills/businesses/SKILL.md       Shared business and practice discovery skill
 skills/payroll-setup/SKILL.md    PAYE scheme and pay schedule discovery
 skills/employees/SKILL.md        Employee and employment discovery
 skills/payroll/SKILL.md          Payroll previews, saved results and history
+skills/tax-year-rollovers/SKILL.md  Tax-year rollover progress and history
 providers/openai/plugin.json     OpenAI manifest defaults
 providers/openai/mcp.json        OpenAI MCP connection defaults
 production.json                 Production identity and endpoint
@@ -49,6 +50,7 @@ dist/openai/
     skills/payroll-setup/SKILL.md
     skills/employees/SKILL.md
     skills/payroll/SKILL.md
+    skills/tax-year-rollovers/SKILL.md
     assets/icon.svg
   opsd.zip
 ```
@@ -109,6 +111,9 @@ The ZIP is an initial package, not a completed public catalogue submission.
 - `get_payroll_run` returns one run with its saved payments and calculation.
 - `preview_payroll_run` calculates a draft or reopened run without saving results.
 - `get_payroll_run_history` returns retained revisions, attempts and outcomes.
+- `list_tax_year_rollovers` lists a PAYE scheme's rollovers.
+- `get_tax_year_rollover` returns current progress and recorded decisions.
+- `get_tax_year_rollover_history` returns attempts and outcomes for both stages.
 
 The shared skill combines standalone businesses and practice clients for general
 business discovery. It keeps practice roles separate from business operational
@@ -124,7 +129,11 @@ The payroll skill helps select a run and distinguish live previews, saved
 calculations and historical submissions. These tools do not change payroll or
 submit it to HMRC.
 
-All fifteen tools are read-only. OAuth requests `api:read`, `api:write`, and `hmrc:submit`.
+The tax-year-rollovers skill distinguishes final FPS and new-year EPS progress,
+retained cancelled operations and submission retries. It supports reading status
+and history without starting or recovering a rollover.
+
+All eighteen tools are read-only. OAuth requests `api:read`, `api:write`, and `hmrc:submit`.
 On the consent page, the user can approve any nonempty subset of these independent
 permissions. These tools require `api:read`; granting only write or
 submission permission does not allow these lookups. Opserver enforces the granted
