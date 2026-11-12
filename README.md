@@ -14,7 +14,7 @@ assets/icon.svg                 Shared Opsd icon
 skills/businesses/SKILL.md       Shared business and practice discovery skill
 skills/payroll-setup/SKILL.md    PAYE scheme and pay schedule discovery
 skills/employees/SKILL.md        Employee and employment discovery
-skills/payroll/SKILL.md          Payroll run discovery and saved results
+skills/payroll/SKILL.md          Payroll previews, saved results and history
 providers/openai/plugin.json     OpenAI manifest defaults
 providers/openai/mcp.json        OpenAI MCP connection defaults
 production.json                 Production identity and endpoint
@@ -107,6 +107,8 @@ The ZIP is an initial package, not a completed public catalogue submission.
   stored payroll settings.
 - `list_payroll_runs` lists payroll runs and their states.
 - `get_payroll_run` returns one run with its saved payments and calculation.
+- `preview_payroll_run` calculates a draft or reopened run without saving results.
+- `get_payroll_run_history` returns retained revisions, attempts and outcomes.
 
 The shared skill combines standalone businesses and practice clients for general
 business discovery. It keeps practice roles separate from business operational
@@ -118,10 +120,11 @@ chosen business, using IDs to match schedules to their schemes.
 The employees skill distinguishes people from their employments, matches them
 by ID and helps interpret stored settings without calculating payroll.
 
-The payroll skill helps select a run and interpret saved results and submission
-status. These tools do not calculate draft previews or submit payroll.
+The payroll skill helps select a run and distinguish live previews, saved
+calculations and historical submissions. These tools do not change payroll or
+submit it to HMRC.
 
-All thirteen tools read data. OAuth requests `api:read`, `api:write`, and `hmrc:submit`.
+All fifteen tools are read-only. OAuth requests `api:read`, `api:write`, and `hmrc:submit`.
 On the consent page, the user can approve any nonempty subset of these independent
 permissions. These tools require `api:read`; granting only write or
 submission permission does not allow these lookups. Opserver enforces the granted
