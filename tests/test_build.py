@@ -26,7 +26,8 @@ class PackageTests(unittest.TestCase):
         for name in (
             "production.json", "providers/openai/plugin.json",
             "providers/openai/mcp.json", "skills/businesses/SKILL.md",
-            "skills/payroll-setup/SKILL.md", "assets/icon.svg",
+            "skills/payroll-setup/SKILL.md", "skills/employees/SKILL.md",
+            "assets/icon.svg",
         ):
             destination = self.source / name
             destination.parent.mkdir(parents=True, exist_ok=True)

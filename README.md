@@ -13,6 +13,7 @@ packages connect to its existing MCP server.
 assets/icon.svg                 Shared Opsd icon
 skills/businesses/SKILL.md       Shared business and practice discovery skill
 skills/payroll-setup/SKILL.md    PAYE scheme and pay schedule discovery
+skills/employees/SKILL.md        Employee and employment discovery
 providers/openai/plugin.json     OpenAI manifest defaults
 providers/openai/mcp.json        OpenAI MCP connection defaults
 production.json                 Production identity and endpoint
@@ -45,6 +46,7 @@ dist/openai/
     .mcp.json
     skills/businesses/SKILL.md
     skills/payroll-setup/SKILL.md
+    skills/employees/SKILL.md
     assets/icon.svg
   opsd.zip
 ```
@@ -98,6 +100,9 @@ The ZIP is an initial package, not a completed public catalogue submission.
 - `list_practice_businesses` lists the businesses owned by a practice.
 - `list_paye_schemes` lists a business's PAYE schemes and recorded settings.
 - `list_pay_schedules` lists its schedules, frequencies and PAYE scheme IDs.
+- `list_employees` and `get_employee` return employee personal details.
+- `list_employments` and `get_employment` return linked employment records and
+  stored payroll settings.
 
 The shared skill combines standalone businesses and practice clients for general
 business discovery. It keeps practice roles separate from business operational
@@ -106,7 +111,10 @@ roles and identifies partial results if a practice lookup fails.
 The payroll-setup skill helps select an existing scheme and schedule within the
 chosen business, using IDs to match schedules to their schemes.
 
-All seven tools read data. OAuth requests `api:read`, `api:write`, and `hmrc:submit`.
+The employees skill distinguishes people from their employments, matches them
+by ID and helps interpret stored settings without calculating payroll.
+
+All eleven tools read data. OAuth requests `api:read`, `api:write`, and `hmrc:submit`.
 On the consent page, the user can approve any nonempty subset of these independent
 permissions. These tools require `api:read`; granting only write or
 submission permission does not allow these lookups. Opserver enforces the granted
