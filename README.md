@@ -14,6 +14,7 @@ assets/icon.svg                 Shared Opsd icon
 skills/businesses/SKILL.md       Shared business and practice discovery skill
 skills/payroll-setup/SKILL.md    PAYE scheme and pay schedule discovery
 skills/employees/SKILL.md        Employee and employment discovery
+skills/payroll/SKILL.md          Payroll run discovery and saved results
 providers/openai/plugin.json     OpenAI manifest defaults
 providers/openai/mcp.json        OpenAI MCP connection defaults
 production.json                 Production identity and endpoint
@@ -47,6 +48,7 @@ dist/openai/
     skills/businesses/SKILL.md
     skills/payroll-setup/SKILL.md
     skills/employees/SKILL.md
+    skills/payroll/SKILL.md
     assets/icon.svg
   opsd.zip
 ```
@@ -103,6 +105,8 @@ The ZIP is an initial package, not a completed public catalogue submission.
 - `list_employees` and `get_employee` return employee personal details.
 - `list_employments` and `get_employment` return linked employment records and
   stored payroll settings.
+- `list_payroll_runs` lists payroll runs and their states.
+- `get_payroll_run` returns one run with its saved payments and calculation.
 
 The shared skill combines standalone businesses and practice clients for general
 business discovery. It keeps practice roles separate from business operational
@@ -114,7 +118,10 @@ chosen business, using IDs to match schedules to their schemes.
 The employees skill distinguishes people from their employments, matches them
 by ID and helps interpret stored settings without calculating payroll.
 
-All eleven tools read data. OAuth requests `api:read`, `api:write`, and `hmrc:submit`.
+The payroll skill helps select a run and interpret saved results and submission
+status. These tools do not calculate draft previews or submit payroll.
+
+All thirteen tools read data. OAuth requests `api:read`, `api:write`, and `hmrc:submit`.
 On the consent page, the user can approve any nonempty subset of these independent
 permissions. These tools require `api:read`; granting only write or
 submission permission does not allow these lookups. Opserver enforces the granted
