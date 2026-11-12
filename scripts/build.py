@@ -99,6 +99,7 @@ def build(config_path, output):
     manifest["interface"]["displayName"] = config["title"]
     manifest["interface"]["defaultPrompt"] = [
         f"Use {config['title']} to list my standalone businesses.",
+        f"Use {config['title']} to list my practices and their clients.",
         f"Use {config['title']} to look up a business by its ID.",
     ]
     mcp = read_json(ROOT / "providers/openai/mcp.json")

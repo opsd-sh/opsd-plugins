@@ -11,7 +11,8 @@ packages connect to its existing MCP server.
 
 ```text
 assets/icon.svg                 Shared Opsd icon
-skills/businesses/SKILL.md       Small shared business lookup skill
+skills/businesses/SKILL.md       Shared business and practice discovery skill
+skills/payroll-setup/SKILL.md    PAYE scheme and pay schedule discovery
 providers/openai/plugin.json     OpenAI manifest defaults
 providers/openai/mcp.json        OpenAI MCP connection defaults
 production.json                 Production identity and endpoint
@@ -20,7 +21,7 @@ scripts/build.py                Shared packaging script
 tests/test_build.py              Packaging checks
 ```
 
-The skill and icon are maintained here once. The private `opsd-plugins-dev`
+The skills and icon are maintained here once. The private `opsd-plugins-dev`
 repository supplies development settings and invokes this same build script.
 Future providers can add their own packaging under `providers/` while reusing
 the shared content; their formats are not implemented yet.
@@ -43,6 +44,7 @@ dist/openai/
     .codex-plugin/plugin.json
     .mcp.json
     skills/businesses/SKILL.md
+    skills/payroll-setup/SKILL.md
     assets/icon.svg
   opsd.zip
 ```
@@ -90,11 +92,23 @@ The ZIP is an initial package, not a completed public catalogue submission.
 ## Tools and authentication
 
 - `list_businesses` lists standalone businesses where the user has direct membership.
-- `get_business` looks up a business by its public ID, subject to the user's access.
+- `get_business` looks up a business by its public ID, including access through a practice.
+- `list_practices` lists practices and the user's role in each.
+- `get_practice` looks up a practice by its public ID.
+- `list_practice_businesses` lists the businesses owned by a practice.
+- `list_paye_schemes` lists a business's PAYE schemes and recorded settings.
+- `list_pay_schedules` lists its schedules, frequencies and PAYE scheme IDs.
 
-Both tools read data. OAuth requests `api:read`, `api:write`, and `hmrc:submit`.
+The shared skill combines standalone businesses and practice clients for general
+business discovery. It keeps practice roles separate from business operational
+roles and identifies partial results if a practice lookup fails.
+
+The payroll-setup skill helps select an existing scheme and schedule within the
+chosen business, using IDs to match schedules to their schemes.
+
+All seven tools read data. OAuth requests `api:read`, `api:write`, and `hmrc:submit`.
 On the consent page, the user can approve any nonempty subset of these independent
-permissions. The two current tools require `api:read`; granting only write or
+permissions. These tools require `api:read`; granting only write or
 submission permission does not allow these lookups. Opserver enforces the granted
 scopes alongside the user's existing membership and role permissions.
 
@@ -102,8 +116,11 @@ The listing's Read capability describes the available tools; it does not restric
 the token to read-only access. OAuth endpoints and CIMD support are discovered
 from Opserver; credentials are not packaged.
 
-This configuration requires the Opserver and consent-page changes for these
-scopes. Deploy those changes before testing a new connection.
+Version 0.1.5 adds practice discovery guidance. Deploy the corresponding Opserver
+practice tools to the target environment before testing those workflows.
+The existing OAuth scopes and connection identities are unchanged. If practice
+tools are unavailable, the skill reports that limit and can still look up a
+known client business ID with `get_business`.
 
 The icon is the existing Opsd favicon from `www/public/favicon.svg`.
 
