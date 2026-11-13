@@ -12,6 +12,7 @@ packages connect to its existing MCP server.
 ```text
 assets/icon.svg                 Shared Opsd icon
 skills/businesses/SKILL.md       Shared business and practice discovery skill
+skills/members/SKILL.md          Members and outgoing invitations
 skills/payroll-setup/SKILL.md    PAYE scheme and pay schedule discovery
 skills/employees/SKILL.md        Employee and employment discovery
 skills/payroll/SKILL.md          Payroll previews, saved results and history
@@ -47,6 +48,7 @@ dist/openai/
     .codex-plugin/plugin.json
     .mcp.json
     skills/businesses/SKILL.md
+    skills/members/SKILL.md
     skills/payroll-setup/SKILL.md
     skills/employees/SKILL.md
     skills/payroll/SKILL.md
@@ -102,6 +104,9 @@ The ZIP is an initial package, not a completed public catalogue submission.
 - `list_practices` lists practices and the user's role in each.
 - `get_practice` looks up a practice by its public ID.
 - `list_practice_businesses` lists the businesses owned by a practice.
+- `list_business_members` and `list_practice_members` list user accounts and roles.
+- `list_outgoing_business_invitations` and `list_outgoing_practice_invitations`
+  list pending, unexpired invitations sent by the business or practice.
 - `list_paye_schemes` lists a business's PAYE schemes and recorded settings.
 - `list_pay_schedules` lists its schedules, frequencies and PAYE scheme IDs.
 - `list_employees` and `get_employee` return employee personal details.
@@ -119,6 +124,10 @@ The shared skill combines standalone businesses and practice clients for general
 business discovery. It keeps practice roles separate from business operational
 roles and identifies partial results if a practice lookup fails.
 
+The members skill distinguishes standalone business access from practice
+membership, and pending invitations from current members. These tools require
+the relevant admin role in addition to the read scope.
+
 The payroll-setup skill helps select an existing scheme and schedule within the
 chosen business, using IDs to match schedules to their schemes.
 
@@ -133,7 +142,7 @@ The tax-year-rollovers skill distinguishes final FPS and new-year EPS progress,
 retained cancelled operations and submission retries. It supports reading status
 and history without starting or recovering a rollover.
 
-All eighteen tools are read-only. OAuth requests `api:read`, `api:write`, and `hmrc:submit`.
+All twenty-two tools are read-only. OAuth requests `api:read`, `api:write`, and `hmrc:submit`.
 On the consent page, the user can approve any nonempty subset of these independent
 permissions. These tools require `api:read`; granting only write or
 submission permission does not allow these lookups. Opserver enforces the granted

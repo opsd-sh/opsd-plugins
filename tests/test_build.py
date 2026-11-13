@@ -26,7 +26,8 @@ class PackageTests(unittest.TestCase):
         for name in (
             "production.json", "providers/openai/plugin.json",
             "providers/openai/mcp.json", "skills/businesses/SKILL.md",
-            "skills/payroll-setup/SKILL.md", "skills/employees/SKILL.md",
+            "skills/members/SKILL.md", "skills/payroll-setup/SKILL.md",
+            "skills/employees/SKILL.md",
             "skills/payroll/SKILL.md", "skills/tax-year-rollovers/SKILL.md",
             "assets/icon.svg",
         ):
