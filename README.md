@@ -13,7 +13,7 @@ packages connect to its existing MCP server.
 assets/icon.svg                 Shared Opsd icon
 skills/businesses/SKILL.md       Shared business and practice discovery skill
 skills/members/SKILL.md          Members and sent or received invitations
-skills/billing/SKILL.md          Payroll agreements, suspensions and invoices
+skills/billing/SKILL.md          Agreements, invoices and live payment setup
 skills/payroll-setup/SKILL.md    Payroll setup and practice HMRC reporting
 skills/employees/SKILL.md        Employee and employment discovery
 skills/payroll/SKILL.md          Payroll previews, saved results and history
@@ -116,6 +116,8 @@ The ZIP is an initial package, not a completed public catalogue submission.
 - `get_practice_business_payroll` reads a practice client's payroll enablement and shared suspension.
 - `list_business_invoices` and `list_practice_invoices` page through saved invoice summaries.
 - `list_business_invoice_lines` and `list_practice_invoice_lines` page through saved charges by business.
+- `get_business_billing_status` and `get_practice_billing_status` check the current default payment method at Stripe.
+- `list_business_payment_methods` and `list_practice_payment_methods` read live saved methods and safe card summaries.
 - `list_paye_schemes` lists a business's PAYE schemes and recorded settings.
 - `list_pay_schedules` lists its schedules, frequencies and PAYE scheme IDs.
 - `list_employees` and `get_employee` return employee personal details.
@@ -141,8 +143,10 @@ business or practice.
 
 The billing skill distinguishes payroll agreement status from billing suspension,
 and standalone subscriptions from practice client enablement. It also explains
-invoice pagination, saved payment statuses and client charge breakdowns. All six
-billing tools require the relevant admin role and read locally stored state.
+invoice pagination, saved payment statuses and client charge breakdowns. Four
+additional tools read payment setup live from Stripe. All ten billing tools
+require the relevant admin role. Payment methods, agreement status and
+suspension remain separate facts.
 
 The payroll-setup skill helps select an existing scheme and schedule within the
 chosen business, using IDs to match schedules to their schemes. It also explains
@@ -159,7 +163,7 @@ The tax-year-rollovers skill distinguishes final FPS and new-year EPS progress,
 retained cancelled operations and submission retries. It supports reading status
 and history without starting or recovering a rollover.
 
-All thirty-one tools are read-only. OAuth requests `api:read`, `api:write`, and `hmrc:submit`.
+All thirty-five tools are read-only. OAuth requests `api:read`, `api:write`, and `hmrc:submit`.
 On the consent page, the user can approve any nonempty subset of these independent
 permissions. These tools require `api:read`; granting only write or
 submission permission does not allow these lookups. Opserver enforces the granted

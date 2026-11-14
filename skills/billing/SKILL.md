@@ -1,6 +1,6 @@
 ---
 name: billing
-description: Check payroll subscriptions, practice client enablement, billing suspensions, saved invoices and their charge breakdowns in Opsd. Use for billing history and service status, not payroll calculations or payment actions.
+description: Check payroll subscriptions, practice client enablement, billing suspensions, invoice history and live payment-method setup in Opsd. Use for billing status and charge breakdowns, not payroll calculations or payment actions.
 ---
 
 Use the selected Opsd connection. Resolve the business and, for a practice
@@ -21,8 +21,15 @@ when needed. Use returned public IDs.
   same practice ID and the invoice's `id` as `invoice_id`. Both require practice
   admin membership. These are consolidated practice invoices; identify a
   client's charges using each line's `business_id`.
+- To check whether a standalone business has a default payment method, call
+  `get_business_billing_status` with `business_id`. If details of its saved
+  methods are needed, call `list_business_payment_methods` with the same ID.
+  Both require direct business admin membership.
+- For the practice's shared payment setup, use `get_practice_billing_status`
+  or `list_practice_payment_methods` with `practice_id`. Both require practice
+  admin membership. Payment setup belongs to the practice, not each client.
 
-All six tools require `api:read`. The business operational role from `get_business`
+All ten tools require `api:read`. The business operational role from `get_business`
 does not identify whether access is direct or through a practice. Use the
 practice tool for known practice clients, even when that role is `admin`.
 When the owning practice is unknown, match the business ID against clients
@@ -85,9 +92,31 @@ group by business ID when explaining client charges, including similarly named
 clients. Do not treat one client's charges as the whole practice invoice.
 
 Invoice reads remain available without an active payroll agreement, including
-after cancellation or during suspension. They do not take payment, change
-agreements or payment setup, or download PDFs. These tools do not check live
-payment methods or balances. Do not request payment or HMRC credentials.
+after cancellation or during suspension. Invoice tools use saved local state;
+the billing-status and payment-method tools instead read Stripe live. None of
+these tools takes payment, changes agreements or payment setup, downloads PDFs,
+or reports a live outstanding balance. Do not request payment or HMRC credentials.
+
+`payment_method_saved` means Stripe currently records a default payment method.
+False can mean no default or missing/pending customer setup; it does not prove
+there are no attached methods. True does not establish that payroll is enabled,
+unsuspended or guaranteed to collect successfully. Check the agreement only
+when the user's question also requires payroll service status.
+
+Payment-method lists include IDs, types, the current `is_default` marker and,
+for cards, brand, last four digits and expiry. `card: null` means a non-card
+method, not missing payment setup. These reads expose the customer's invoice
+default; they do not select a method or change existing invoices.
+
+For payment-method pagination, pass `next_starting_after` as `starting_after`
+with the same payer ID until null. `limit` defaults to 25 and allows 1 to 100.
+This cursor is a returned payment-method ID, unlike an invoice month or offset.
+The default may be on a later page. Methods and defaults can change between
+reads, so a listing is not a frozen snapshot. If a cursor becomes invalid,
+check the payer and restart from the first page once; report a repeated failure.
+An empty successful list includes missing or pending customer setup. A provider
+failure is an error, not an empty list or a false billing status; explain the
+returned problem and any indicated retry delay.
 
 Treat failures separately from status values. Not found may mean a missing or
 inaccessible business or practice, a business outside the supplied practice,
