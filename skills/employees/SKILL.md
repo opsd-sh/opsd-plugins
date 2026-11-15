@@ -1,12 +1,12 @@
 ---
 name: employees
-description: Find employees and employments, create employee and employment records, and update personal details in Opsd. Use for discovery, employee maintenance and employment onboarding.
+description: Find, create and update employees and employments in Opsd. Use for discovery, personal-detail maintenance, employment onboarding and payroll-setting changes.
 ---
 
 Use the Opsd connection and business selected by the user or established in the
 conversation. If the business is unclear, use the [business discovery skill](../businesses/SKILL.md),
 including practice clients. Keep operations on that connection and business.
-Lookups require `api:read`; creation and employee updates require `api:write`.
+Lookups require `api:read`; creation and updates require `api:write`.
 Write alone is sufficient when the business, employee and requested details are
 known; a preliminary lookup is not required.
 
@@ -71,8 +71,12 @@ change employment settings, recalculate a run or submit anything to HMRC.
 For employment creation, read [employment onboarding](references/employment-creation.md).
 `create_employment` links an existing employee to a scheme and schedule, records
 starter evidence and resolves initial tax settings. It requires explicit pay,
-hours, NI and loan declarations. Existing employment updates and tax-code
-notices are not yet available through tools.
+hours, NI and loan declarations.
+
+For employment edits, read [employment updates](references/employment-updates.md).
+`update_employment` changes payroll defaults or starter evidence while retaining
+payroll-history protections. Applying HMRC tax-code notices is not yet available
+through tools.
 
 Money fields are integer pence. `monthly_gross_pay_pence` is a stored default,
 not a calculated payment. `previous_employment` amounts apply to the returned

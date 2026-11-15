@@ -68,5 +68,6 @@ the returned error without changing other records to bypass it.
 
 Return the new employment ID and its employee, scheme and schedule. Creation
 does not enable billing, create a pay run, add the job to existing drafts or
-submit anything to HMRC. Updating existing employment settings or applying an
-HMRC tax-code notice is not yet supported by the available tools.
+submit anything to HMRC. For changes to an existing job, follow
+[employment updates](employment-updates.md). Applying an HMRC tax-code notice
+is not yet supported by the available tools.

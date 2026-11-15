@@ -128,6 +128,7 @@ The ZIP is an initial package, not a completed public catalogue submission.
 - `update_employee` changes personal details while preserving payroll-history restrictions.
 - `list_employees` and `get_employee` return employee personal details.
 - `create_employment` links an employee to a scheme and schedule and resolves initial tax settings from supplied starter evidence.
+- `update_employment` changes payroll defaults or starter evidence while preserving payroll-history and tax-code-notice restrictions.
 - `list_employments` and `get_employment` return linked employment records and
   stored payroll settings.
 - `list_payroll_runs` lists payroll runs and their states.
@@ -167,7 +168,8 @@ by ID and helps interpret stored settings without calculating payroll. It also
 guides employee creation and personal-detail updates, including field clearing,
 duplicate creation and payroll-history restrictions. Employment onboarding
 guidance covers explicit loan declarations, P45/checklist evidence and the
-server-resolved initial tax treatment.
+server-resolved initial tax treatment. Employment update guidance covers partial
+edits, stored defaults and restrictions after payroll or an HMRC notice.
 
 The payroll skill helps select a run and distinguish live previews, saved
 calculations and historical submissions. These tools do not change payroll or
@@ -177,8 +179,8 @@ The tax-year-rollovers skill distinguishes final FPS and new-year EPS progress,
 retained cancelled operations and submission retries. It supports reading status
 and history without starting or recovering a rollover.
 
-There are forty-two tools: thirty-five read-only tools, six creation tools and
-one employee-update tool.
+There are forty-three tools: thirty-five read-only tools, six creation tools and
+two update tools.
 OAuth requests `api:read`, `api:write`, and `hmrc:submit`. On the consent page,
 the user can approve any nonempty subset of these independent permissions. Lookups
 require `api:read`; creation and updates require `api:write`. Write alone permits
