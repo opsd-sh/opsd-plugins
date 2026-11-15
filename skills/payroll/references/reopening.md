@@ -35,7 +35,9 @@ calculation of the reopened inputs. Use
 Follow the payment or inclusion guidance for requested edits. Reopened runs
 cannot be discarded. Retrying would send the same frozen revision again;
 reopening allows corrections before a later finalization creates a new revision.
-Finalization, retry and cancellation tools are not yet available.
+To stop the reopened run instead, follow [cancellation guidance](cancellation.md).
+Do not cancel it as an automatic response to an editing failure. Finalization
+and retry tools are not yet available.
 
 A version conflict requires reviewing the current state. Do not silently fetch
 a new version and retry; establish that reopening still matches the user's

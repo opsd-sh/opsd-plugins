@@ -1,12 +1,12 @@
 ---
 name: payroll
-description: Create, edit or discard payroll drafts, reopen eligible finalized runs, preview calculations and inspect saved payments and submission history in Opsd. Use for payroll preparation and questions; finalizing and submitting runs are not yet supported by these tools.
+description: Create, edit or discard payroll drafts, reopen or cancel eligible runs, preview calculations and inspect saved payments and submission history in Opsd. Use for payroll preparation and questions; finalizing and submitting runs are not yet supported by these tools.
 ---
 
 Use the Opsd connection and business selected by the user or established in the
 conversation. If needed, resolve the business with the [business discovery skill](../businesses/SKILL.md),
-including practice clients. Draft creation, edits, deletion and reopening require
-`api:write`; the four read tools require `api:read`.
+including practice clients. Draft creation, edits, deletion, reopening and
+cancellation require `api:write`; the four read tools require `api:read`.
 Write alone permits these operations when the required IDs and inputs are known.
 
 For draft creation, read [draft creation guidance](references/draft-creation.md)
@@ -26,6 +26,10 @@ reopened or finalized runs.
 To reopen a finalized run for corrections, read [reopening guidance](references/reopening.md)
 before calling `reopen_payroll_run`. Reopening requires every submission attempt
 to have been rejected or confirmed not sent; it does not submit anything to HMRC.
+
+To stop an eligible finalized or reopened run, read [cancellation guidance](references/cancellation.md)
+before calling `cancel_payroll_run`. It retains the run and its history and cannot
+withdraw or undo an accepted HMRC submission.
 
 - Call `list_payroll_runs` with only `business_id` to find runs. Filter the
   returned records locally by payment date, status, PAYE scheme or pay schedule.
@@ -83,13 +87,13 @@ employees or HMRC have been paid.
 
 `available_actions` describes recovery options for the run's current state; it
 does not grant OAuth permissions or mean the connected tools can execute them.
-Report the returned guidance and any `preparation_failure`. Cancellation,
-finalization, retry and resume tools are not yet available. Do not request HMRC
-credentials for draft creation, inclusion/exclusion, edits, deletion, reopening or reading.
+Report the returned guidance and any `preparation_failure`. Finalization, retry
+and resume tools are not yet available. None of the current payroll tools
+requires HMRC credentials.
 
 Keep failures separate from empty results. A not-found error can mean a missing
 or inaccessible business, or a run absent from the supplied business. Explain
 which lookup failed and label any partial results. For insufficient scope, ask
 the user to reconnect with the permission required by that operation: Write for
-creation, edits, deletion and reopening, or Read for lookups and previews.
+creation, edits, deletion, reopening and cancellation, or Read for lookups and previews.
 For authentication failure, ask them to reconnect the same Opsd connection.
