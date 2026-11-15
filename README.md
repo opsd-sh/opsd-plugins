@@ -139,6 +139,7 @@ The ZIP is an initial package, not a completed public catalogue submission.
 - `discard_payroll_run` permanently deletes an ordinary draft and its payments, checking the reviewed version.
 - `reopen_payroll_run` reopens an eligible finalized run for corrections, preserving saved payments and submission history.
 - `cancel_payroll_run` marks an eligible finalized or reopened run as cancelled, retaining its records and submission history.
+- `resume_payroll_run_polling` resumes paused HMRC status checks for an existing submission in the background.
 - `list_payroll_runs` lists payroll runs and their states.
 - `get_payroll_run` returns one run with its saved payments and calculation.
 - `preview_payroll_run` calculates a draft or reopened run without saving results.
@@ -190,15 +191,17 @@ Reopening guidance distinguishes corrections from retries and requires all
 submission attempts to be resolved before the run can be edited again.
 Cancellation guidance distinguishes stopping a run from deleting a draft or
 withdrawing an HMRC submission, and explains which payment inputs are returned.
+Polling recovery guidance distinguishes resuming status checks from sending
+a new submission, and explains saved delays and background outcomes.
 The skill also helps select a run and distinguish live previews, saved calculations
-and historical submissions. These tools do not finalize payroll or submit it to HMRC.
+and historical submissions. These tools do not finalize payroll or send a new submission to HMRC.
 
 The tax-year-rollovers skill distinguishes final FPS and new-year EPS progress,
 retained cancelled operations and submission retries. It supports reading status
 and history without starting or recovering a rollover.
 
-There are fifty-one tools: thirty-five read-only tools, seven creation tools,
-eight update tools and one deletion tool.
+There are fifty-two tools: thirty-five read-only tools, seven creation tools,
+nine update tools and one deletion tool.
 OAuth requests `api:read`, `api:write`, and `hmrc:submit`. On the consent page,
 the user can approve any nonempty subset of these independent permissions. Lookups
 require `api:read`; creation, updates and deletion require `api:write`. Write alone
