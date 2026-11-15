@@ -32,8 +32,8 @@ allowed, subject to the current payroll protections.
 The server merges partial edits with the stored employment. A change to the
 start date or starter evidence resolves initial tax treatment again using that
 merged evidence. Report the returned treatment; do not set a tax code directly
-or use starter corrections to apply an HMRC notice. Applying notices through
-MCP is not yet supported.
+or use starter corrections to apply an HMRC notice. For a received notice, use
+`apply_employment_tax_code_notice` following [tax-code notices](tax-code-notices.md).
 
 A closing tax year blocks edits. Actual start-date, starter-evidence and NI
 category changes are blocked after the employment appears in finalized payroll.

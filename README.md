@@ -129,6 +129,7 @@ The ZIP is an initial package, not a completed public catalogue submission.
 - `list_employees` and `get_employee` return employee personal details.
 - `create_employment` links an employee to a scheme and schedule and resolves initial tax settings from supplied starter evidence.
 - `update_employment` changes payroll defaults or starter evidence while preserving payroll-history and tax-code-notice restrictions.
+- `apply_employment_tax_code_notice` records a received notice without replacing starter evidence or saved payroll history.
 - `list_employments` and `get_employment` return linked employment records and
   stored payroll settings.
 - `list_payroll_runs` lists payroll runs and their states.
@@ -169,7 +170,8 @@ guides employee creation and personal-detail updates, including field clearing,
 duplicate creation and payroll-history restrictions. Employment onboarding
 guidance covers explicit loan declarations, P45/checklist evidence and the
 server-resolved initial tax treatment. Employment update guidance covers partial
-edits, stored defaults and restrictions after payroll or an HMRC notice.
+edits, stored defaults and restrictions after payroll or an HMRC notice. Notice
+guidance explains cumulative amounts, basis changes and effects on live previews.
 
 The payroll skill helps select a run and distinguish live previews, saved
 calculations and historical submissions. These tools do not change payroll or
@@ -179,8 +181,8 @@ The tax-year-rollovers skill distinguishes final FPS and new-year EPS progress,
 retained cancelled operations and submission retries. It supports reading status
 and history without starting or recovering a rollover.
 
-There are forty-three tools: thirty-five read-only tools, six creation tools and
-two update tools.
+There are forty-four tools: thirty-five read-only tools, six creation tools and
+three update tools.
 OAuth requests `api:read`, `api:write`, and `hmrc:submit`. On the consent page,
 the user can approve any nonempty subset of these independent permissions. Lookups
 require `api:read`; creation and updates require `api:write`. Write alone permits

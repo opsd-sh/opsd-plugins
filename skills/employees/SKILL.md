@@ -1,6 +1,6 @@
 ---
 name: employees
-description: Find, create and update employees and employments in Opsd. Use for discovery, personal-detail maintenance, employment onboarding and payroll-setting changes.
+description: Find, create and update employees and employments in Opsd. Use for discovery, personal-detail maintenance, employment onboarding, payroll-setting changes and received HMRC tax-code notices.
 ---
 
 Use the Opsd connection and business selected by the user or established in the
@@ -75,8 +75,11 @@ hours, NI and loan declarations.
 
 For employment edits, read [employment updates](references/employment-updates.md).
 `update_employment` changes payroll defaults or starter evidence while retaining
-payroll-history protections. Applying HMRC tax-code notices is not yet available
-through tools.
+payroll-history protections.
+
+For a received HMRC notice, read [tax-code notices](references/tax-code-notices.md).
+`apply_employment_tax_code_notice` records the supplied notice separately from
+starter evidence. It requires Write; it does not fetch notices or submit to HMRC.
 
 Money fields are integer pence. `monthly_gross_pay_pence` is a stored default,
 not a calculated payment. `previous_employment` amounts apply to the returned
