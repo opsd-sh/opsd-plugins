@@ -16,9 +16,11 @@ Do not enable billing or change the agreement as a side effect of this request.
 The tool includes the schedule's employments whose start dates are on or before
 the payment date. Future starters are excluded; an unknown start date blocks
 creation. Inclusion is per employment, so one person may appear more than once.
-There is no argument for choosing a subset of employments. If the request needs
-one, explain that inclusion and exclusion tools are not yet available instead
-of changing employment records to control inclusion.
+Creation has no argument for choosing a subset of employments. For a requested
+subset, create the draft and then follow the [inclusion and exclusion guidance](employment-inclusion.md).
+Do not change employment records to control inclusion. These are separate
+operations: report any failed adjustment rather than claiming the requested
+subset is ready.
 
 Creation copies each included employment's current gross pay and working-hours
 defaults into the run's payments. Later changes to those defaults do not rewrite

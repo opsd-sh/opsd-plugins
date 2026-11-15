@@ -31,7 +31,8 @@ revisions from previous submissions. Use `update_employment` for a requested
 change to future defaults. This tool cannot include or exclude an employment,
 change the payment date or schedule, or alter tax settings. An excluded
 employment cannot be edited through this tool, and setting pay to zero is not
-an exclusion.
+an exclusion. For a requested change to inclusion, follow the
+[inclusion and exclusion guidance](employment-inclusion.md).
 
 A successful response has empty content and means the edit completed. It does
 not return the payment or calculate payroll. Report the requested change as
