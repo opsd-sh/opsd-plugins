@@ -17,14 +17,16 @@ The tool includes the schedule's employments whose start dates are on or before
 the payment date. Future starters are excluded; an unknown start date blocks
 creation. Inclusion is per employment, so one person may appear more than once.
 There is no argument for choosing a subset of employments. If the request needs
-one, explain that draft-editing tools are not yet available instead of changing
-employment records to control inclusion.
+one, explain that inclusion and exclusion tools are not yet available instead
+of changing employment records to control inclusion.
 
 Creation copies each included employment's current gross pay and working-hours
 defaults into the run's payments. Later changes to those defaults do not rewrite
 the draft's saved payments. Tax settings are still live when previewing; they
 are not frozen by creating a draft. A successful creation is not a complete
 payroll-readiness check, and an empty schedule can produce an empty draft.
+For a requested override to an included payment, follow the
+[payment editing guidance](payment-updates.md).
 
 Report the returned run ID, payment date, draft status and employment count.
 The response is a summary, not a calculation. Use `get_payroll_run` for saved
