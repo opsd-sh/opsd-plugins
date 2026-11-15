@@ -16,7 +16,7 @@ skills/members/SKILL.md          Members and sent or received invitations
 skills/billing/SKILL.md          Agreements, invoices and live payment setup
 skills/payroll-setup/SKILL.md    Payroll setup and practice HMRC reporting
 skills/employees/SKILL.md        Employee and employment discovery
-skills/payroll/SKILL.md          Payroll previews, saved results and history
+skills/payroll/SKILL.md          Draft creation, previews and payroll history
 skills/tax-year-rollovers/SKILL.md  Tax-year rollover progress and history
 providers/openai/plugin.json     OpenAI manifest defaults
 providers/openai/mcp.json        OpenAI MCP connection defaults
@@ -132,6 +132,7 @@ The ZIP is an initial package, not a completed public catalogue submission.
 - `apply_employment_tax_code_notice` records a received notice without replacing starter evidence or saved payroll history.
 - `list_employments` and `get_employment` return linked employment records and
   stored payroll settings.
+- `create_payroll_run` creates a draft and copies the schedule’s eligible employments and payment defaults.
 - `list_payroll_runs` lists payroll runs and their states.
 - `get_payroll_run` returns one run with its saved payments and calculation.
 - `preview_payroll_run` calculates a draft or reopened run without saving results.
@@ -173,15 +174,16 @@ server-resolved initial tax treatment. Employment update guidance covers partial
 edits, stored defaults and restrictions after payroll or an HMRC notice. Notice
 guidance explains cumulative amounts, basis changes and effects on live previews.
 
-The payroll skill helps select a run and distinguish live previews, saved
-calculations and historical submissions. These tools do not change payroll or
-submit it to HMRC.
+The payroll skill guides draft creation, including automatic employment inclusion,
+copied pay and hours, and duplicate risks after uncertain outcomes. It also helps
+select a run and distinguish live previews, saved calculations and historical
+submissions. These tools do not finalize payroll or submit it to HMRC.
 
 The tax-year-rollovers skill distinguishes final FPS and new-year EPS progress,
 retained cancelled operations and submission retries. It supports reading status
 and history without starting or recovering a rollover.
 
-There are forty-four tools: thirty-five read-only tools, six creation tools and
+There are forty-five tools: thirty-five read-only tools, seven creation tools and
 three update tools.
 OAuth requests `api:read`, `api:write`, and `hmrc:submit`. On the consent page,
 the user can approve any nonempty subset of these independent permissions. Lookups
