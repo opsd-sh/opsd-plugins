@@ -1,12 +1,12 @@
 ---
 name: employees
-description: Find employees and their employments, create employee records, and update personal details in Opsd. Inspect stored payroll settings without changing employments or calculating payroll.
+description: Find employees and employments, create employee and employment records, and update personal details in Opsd. Use for discovery, employee maintenance and employment onboarding.
 ---
 
 Use the Opsd connection and business selected by the user or established in the
 conversation. If the business is unclear, use the [business discovery skill](../businesses/SKILL.md),
 including practice clients. Keep operations on that connection and business.
-Lookups require `api:read`; employee creation and updates require `api:write`.
+Lookups require `api:read`; creation and employee updates require `api:write`.
 Write alone is sufficient when the business, employee and requested details are
 known; a preliminary lookup is not required.
 
@@ -53,20 +53,26 @@ payroll operators can do this, including users with access through a practice.
   replaces the full list and `address` replaces the whole address, so collect
   the complete replacement when either is being changed.
 
-Creation does not detect duplicate people or create an employment. Each
+`create_employee` does not detect duplicate people or create an employment. Each
 successful call creates another employee, even with identical details. After
 an uncertain creation outcome, use Read access to investigate when available;
 a matching name alone does not prove success. Explain unresolved uncertainty
 and ask before another creation attempt. Use the returned employee ID for
 later work and do not create another person just to add an employment.
 
-Updates retain the server's payroll protections. Changes can conflict with
+Employee updates retain the server's payroll protections. Changes can conflict with
 existing NI categories, a tax-year rollover in progress, or finalized payroll
 history. After finalized payroll, identity changes and changing or clearing an
 existing NI number are currently blocked; adding a missing NI number is still
 permitted unless another restriction applies. Explain the returned conflict
-without changing other records to bypass it. These tools do not change
-employment settings, recalculate a run or submit anything to HMRC.
+without changing other records to bypass it. Employee maintenance does not
+change employment settings, recalculate a run or submit anything to HMRC.
+
+For employment creation, read [employment onboarding](references/employment-creation.md).
+`create_employment` links an existing employee to a scheme and schedule, records
+starter evidence and resolves initial tax settings. It requires explicit pay,
+hours, NI and loan declarations. Existing employment updates and tax-code
+notices are not yet available through tools.
 
 Money fields are integer pence. `monthly_gross_pay_pence` is a stored default,
 not a calculated payment. `previous_employment` amounts apply to the returned
