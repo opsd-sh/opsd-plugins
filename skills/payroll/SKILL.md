@@ -1,13 +1,13 @@
 ---
 name: payroll
-description: Create payroll drafts, choose included employments, edit payment inputs, find runs, preview calculations and inspect saved payments and submission history in Opsd. Use for payroll preparation and questions; finalizing and submitting runs are not yet supported by these tools.
+description: Create, edit or discard payroll drafts, find runs, preview calculations and inspect saved payments and submission history in Opsd. Use for payroll preparation and questions; finalizing and submitting runs are not yet supported by these tools.
 ---
 
 Use the Opsd connection and business selected by the user or established in the
 conversation. If needed, resolve the business with the [business discovery skill](../businesses/SKILL.md),
-including practice clients. Creation, employment inclusion/exclusion and payment
-edits require `api:write`; the four read tools require `api:read`. Write alone
-permits these edits when the required IDs and inputs are known.
+including practice clients. Draft creation, edits and deletion require `api:write`;
+the four read tools require `api:read`.
+Write alone permits these operations when the required IDs and inputs are known.
 
 For draft creation, read [draft creation guidance](references/draft-creation.md)
 before calling `create_payroll_run`. It covers automatic employment inclusion,
@@ -18,6 +18,10 @@ For changes to gross pay or working-hours band on one run, read
 [payment editing guidance](references/payment-updates.md)
 before calling `update_payroll_run_payment`. Use the employee skill for changes
 to employment defaults instead.
+
+To delete an entire draft, read [discard guidance](references/discard.md) before
+calling `discard_payroll_run`. It requires the reviewed version and cannot delete
+reopened or finalized runs.
 
 - Call `list_payroll_runs` with only `business_id` to find runs. Filter the
   returned records locally by payment date, status, PAYE scheme or pay schedule.
@@ -75,13 +79,13 @@ employees or HMRC have been paid.
 
 `available_actions` describes recovery options for the run's current state; it
 does not grant OAuth permissions or mean the connected tools can execute them.
-Report the returned guidance and any `preparation_failure`. Discard, finalization,
-submission and recovery tools are not yet available. Do not request HMRC
-credentials for draft creation, inclusion/exclusion, payment edits or reading.
+Report the returned guidance and any `preparation_failure`. Finalization,
+submission and recovery tools are not yet available. Do not request HMRC credentials
+for draft creation, inclusion/exclusion, payment edits, deletion or reading.
 
 Keep failures separate from empty results. A not-found error can mean a missing
 or inaccessible business, or a run absent from the supplied business. Explain
 which lookup failed and label any partial results. For insufficient scope, ask
 the user to reconnect with the permission required by that operation: Write for
-creation, inclusion/exclusion and payment edits, or Read for lookups and previews.
+creation, edits and deletion, or Read for lookups and previews.
 For authentication failure, ask them to reconnect the same Opsd connection.

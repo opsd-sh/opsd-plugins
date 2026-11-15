@@ -136,6 +136,7 @@ The ZIP is an initial package, not a completed public catalogue submission.
 - `update_payroll_run_payment` changes gross pay or working-hours band on an included draft payment without changing employment defaults.
 - `include_payroll_run_employment` adds an employment with current payment defaults, preserving an existing payment when already included.
 - `exclude_payroll_run_employment` removes an employment's payment and overrides from a draft or reopened run.
+- `discard_payroll_run` permanently deletes an ordinary draft and its payments, checking the reviewed version.
 - `list_payroll_runs` lists payroll runs and their states.
 - `get_payroll_run` returns one run with its saved payments and calculation.
 - `preview_payroll_run` calculates a draft or reopened run without saving results.
@@ -181,21 +182,21 @@ The payroll skill guides draft creation, including automatic employment inclusio
 copied pay and hours, and duplicate risks after uncertain outcomes. It explains
 payment overrides, omitted fields, version changes and preservation of employment
 defaults and saved revisions. Inclusion guidance distinguishes adding an employment
-from re-adding it after exclusion, which copies current defaults. It also helps
-select a run and distinguish live previews, saved calculations and historical
-submissions. These tools do not
-finalize payroll or submit it to HMRC.
+from re-adding it after exclusion, which copies current defaults. Discard guidance
+covers deletion of an entire draft, reviewed versions and preservation of history.
+The skill also helps select a run and distinguish live previews, saved calculations
+and historical submissions. These tools do not finalize payroll or submit it to HMRC.
 
 The tax-year-rollovers skill distinguishes final FPS and new-year EPS progress,
 retained cancelled operations and submission retries. It supports reading status
 and history without starting or recovering a rollover.
 
-There are forty-eight tools: thirty-five read-only tools, seven creation tools and
-six update tools.
+There are forty-nine tools: thirty-five read-only tools, seven creation tools,
+six update tools and one deletion tool.
 OAuth requests `api:read`, `api:write`, and `hmrc:submit`. On the consent page,
 the user can approve any nonempty subset of these independent permissions. Lookups
-require `api:read`; creation and updates require `api:write`. Write alone permits
-these operations when the required inputs are known. Opserver enforces the
+require `api:read`; creation, updates and deletion require `api:write`. Write alone
+permits these operations when the required inputs are known. Opserver enforces the
 granted scopes alongside the user's existing membership and role permissions.
 
 The listing's Read and Write capabilities describe the available tools; the
