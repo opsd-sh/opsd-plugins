@@ -120,6 +120,8 @@ The ZIP is an initial package, not a completed public catalogue submission.
 - `list_business_invoice_lines` and `list_practice_invoice_lines` page through saved charges by business.
 - `get_business_billing_status` and `get_practice_billing_status` check the current default payment method at Stripe.
 - `list_business_payment_methods` and `list_practice_payment_methods` read live saved methods and safe card summaries.
+- `create_paye_scheme` records a PAYE scheme and its initial tax-year settings within a business.
+- `create_pay_schedule` creates a monthly schedule under a scheme in that business.
 - `list_paye_schemes` lists a business's PAYE schemes and recorded settings.
 - `list_pay_schedules` lists its schedules, frequencies and PAYE scheme IDs.
 - `list_employees` and `get_employee` return employee personal details.
@@ -152,9 +154,10 @@ additional tools read payment setup live from Stripe. All ten billing tools
 require the relevant admin role. Payment methods, agreement status and
 suspension remain separate facts.
 
-The payroll-setup skill helps select an existing scheme and schedule within the
-chosen business, using IDs to match schedules to their schemes. It also explains
-practice HMRC reporting details, which any member of that practice can read.
+The payroll-setup skill helps select or create schemes and schedules within the
+chosen business, using IDs to match schedules to their schemes. It explains
+required settings, duplicate employer references and uncertain creation outcomes.
+It also covers practice HMRC reporting details, which any practice member can read.
 
 The employees skill distinguishes people from their employments, matches them
 by ID and helps interpret stored settings without calculating payroll.
@@ -167,8 +170,8 @@ The tax-year-rollovers skill distinguishes final FPS and new-year EPS progress,
 retained cancelled operations and submission retries. It supports reading status
 and history without starting or recovering a rollover.
 
-There are thirty-seven tools: thirty-five read-only tools and two business-creation
-tools. OAuth requests `api:read`, `api:write`, and `hmrc:submit`. On the consent page,
+There are thirty-nine tools: thirty-five read-only tools and four creation tools.
+OAuth requests `api:read`, `api:write`, and `hmrc:submit`. On the consent page,
 the user can approve any nonempty subset of these independent permissions. Lookups
 require `api:read`; creation requires `api:write`. Write alone permits creation
 when the required inputs are known. Opserver enforces the granted scopes alongside
