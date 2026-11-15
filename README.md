@@ -137,6 +137,7 @@ The ZIP is an initial package, not a completed public catalogue submission.
 - `include_payroll_run_employment` adds an employment with current payment defaults, preserving an existing payment when already included.
 - `exclude_payroll_run_employment` removes an employment's payment and overrides from a draft or reopened run.
 - `discard_payroll_run` permanently deletes an ordinary draft and its payments, checking the reviewed version.
+- `reopen_payroll_run` reopens an eligible finalized run for corrections, preserving saved payments and submission history.
 - `list_payroll_runs` lists payroll runs and their states.
 - `get_payroll_run` returns one run with its saved payments and calculation.
 - `preview_payroll_run` calculates a draft or reopened run without saving results.
@@ -184,6 +185,8 @@ payment overrides, omitted fields, version changes and preservation of employmen
 defaults and saved revisions. Inclusion guidance distinguishes adding an employment
 from re-adding it after exclusion, which copies current defaults. Discard guidance
 covers deletion of an entire draft, reviewed versions and preservation of history.
+Reopening guidance distinguishes corrections from retries and requires all
+submission attempts to be resolved before the run can be edited again.
 The skill also helps select a run and distinguish live previews, saved calculations
 and historical submissions. These tools do not finalize payroll or submit it to HMRC.
 
@@ -191,8 +194,8 @@ The tax-year-rollovers skill distinguishes final FPS and new-year EPS progress,
 retained cancelled operations and submission retries. It supports reading status
 and history without starting or recovering a rollover.
 
-There are forty-nine tools: thirty-five read-only tools, seven creation tools,
-six update tools and one deletion tool.
+There are fifty tools: thirty-five read-only tools, seven creation tools,
+seven update tools and one deletion tool.
 OAuth requests `api:read`, `api:write`, and `hmrc:submit`. On the consent page,
 the user can approve any nonempty subset of these independent permissions. Lookups
 require `api:read`; creation, updates and deletion require `api:write`. Write alone
