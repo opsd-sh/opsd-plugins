@@ -124,6 +124,8 @@ The ZIP is an initial package, not a completed public catalogue submission.
 - `create_pay_schedule` creates a monthly schedule under a scheme in that business.
 - `list_paye_schemes` lists a business's PAYE schemes and recorded settings.
 - `list_pay_schedules` lists its schedules, frequencies and PAYE scheme IDs.
+- `create_employee` creates a person’s record within a business.
+- `update_employee` changes personal details while preserving payroll-history restrictions.
 - `list_employees` and `get_employee` return employee personal details.
 - `list_employments` and `get_employment` return linked employment records and
   stored payroll settings.
@@ -160,7 +162,9 @@ required settings, duplicate employer references and uncertain creation outcomes
 It also covers practice HMRC reporting details, which any practice member can read.
 
 The employees skill distinguishes people from their employments, matches them
-by ID and helps interpret stored settings without calculating payroll.
+by ID and helps interpret stored settings without calculating payroll. It also
+guides employee creation and personal-detail updates, including field clearing,
+duplicate creation and payroll-history restrictions.
 
 The payroll skill helps select a run and distinguish live previews, saved
 calculations and historical submissions. These tools do not change payroll or
@@ -170,11 +174,12 @@ The tax-year-rollovers skill distinguishes final FPS and new-year EPS progress,
 retained cancelled operations and submission retries. It supports reading status
 and history without starting or recovering a rollover.
 
-There are thirty-nine tools: thirty-five read-only tools and four creation tools.
+There are forty-one tools: thirty-five read-only tools, five creation tools and
+one employee-update tool.
 OAuth requests `api:read`, `api:write`, and `hmrc:submit`. On the consent page,
 the user can approve any nonempty subset of these independent permissions. Lookups
-require `api:read`; creation requires `api:write`. Write alone permits creation
-when the required inputs are known. Opserver enforces the granted scopes alongside
+require `api:read`; creation and updates require `api:write`. Write alone permits
+these operations when the required inputs are known. Opserver enforces the granted scopes alongside
 the user's existing membership and role permissions.
 
 The listing's Read and Write capabilities describe the available tools; the
