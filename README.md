@@ -11,7 +11,7 @@ packages connect to its existing MCP server.
 
 ```text
 assets/icon.svg                 Shared Opsd icon
-skills/businesses/SKILL.md       Shared business and practice discovery skill
+skills/businesses/SKILL.md       Business discovery and creation skill
 skills/members/SKILL.md          Members and sent or received invitations
 skills/billing/SKILL.md          Agreements, invoices and live payment setup
 skills/payroll-setup/SKILL.md    Payroll setup and practice HMRC reporting
@@ -101,6 +101,8 @@ The ZIP is an initial package, not a completed public catalogue submission.
 
 ## Tools and authentication
 
+- `create_business` creates a standalone business with the connected user as admin.
+- `create_practice_business` creates a client owned by an existing practice, requiring practice admin membership.
 - `list_businesses` lists standalone businesses where the user has direct membership.
 - `get_business` looks up a business by its public ID, including access through a practice.
 - `list_practices` lists practices and the user's role in each.
@@ -133,7 +135,9 @@ The ZIP is an initial package, not a completed public catalogue submission.
 
 The shared skill combines standalone businesses and practice clients for general
 business discovery. It keeps practice roles separate from business operational
-roles and identifies partial results if a practice lookup fails.
+roles and identifies partial results if a practice lookup fails. It also routes
+standalone and practice-client creation, and explains how to handle uncertain
+outcomes without automatically creating duplicate businesses.
 
 The members skill distinguishes standalone business access from practice
 membership, and pending invitations from current members. Member and outgoing
@@ -163,15 +167,16 @@ The tax-year-rollovers skill distinguishes final FPS and new-year EPS progress,
 retained cancelled operations and submission retries. It supports reading status
 and history without starting or recovering a rollover.
 
-All thirty-five tools are read-only. OAuth requests `api:read`, `api:write`, and `hmrc:submit`.
-On the consent page, the user can approve any nonempty subset of these independent
-permissions. These tools require `api:read`; granting only write or
-submission permission does not allow these lookups. Opserver enforces the granted
-scopes alongside the user's existing membership and role permissions.
+There are thirty-seven tools: thirty-five read-only tools and two business-creation
+tools. OAuth requests `api:read`, `api:write`, and `hmrc:submit`. On the consent page,
+the user can approve any nonempty subset of these independent permissions. Lookups
+require `api:read`; creation requires `api:write`. Write alone permits creation
+when the required inputs are known. Opserver enforces the granted scopes alongside
+the user's existing membership and role permissions.
 
-The listing's Read capability describes the available tools; it does not restrict
-the token to read-only access. OAuth endpoints and CIMD support are discovered
-from Opserver; credentials are not packaged.
+The listing's Read and Write capabilities describe the available tools; the
+token's granted scopes determine which operations it can perform. OAuth endpoints
+and CIMD support are discovered from Opserver; credentials are not packaged.
 
 Version 0.1.5 adds practice discovery guidance. Deploy the corresponding Opserver
 practice tools to the target environment before testing those workflows.

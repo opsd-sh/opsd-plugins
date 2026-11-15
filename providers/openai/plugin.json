@@ -1,7 +1,7 @@
 {
   "name": "opsd",
   "version": "0.1.5",
-  "description": "Find your Opsd businesses, practices and membership roles.",
+  "description": "Find Opsd businesses and practices, or create standalone and practice-client businesses.",
   "author": {
     "name": "Opsd"
   },
@@ -9,11 +9,11 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Opsd",
-    "shortDescription": "Find your businesses, practices and roles.",
-    "longDescription": "Find standalone businesses, practices and their clients, or look up a business or practice by its public ID, using your connected Opsd account.",
+    "shortDescription": "Find and create businesses.",
+    "longDescription": "Find standalone businesses, practices and their clients, look up membership roles, or create a standalone business or a client of an existing practice using your connected Opsd account.",
     "developerName": "Opsd",
     "category": "Productivity",
-    "capabilities": ["Read"],
+    "capabilities": ["Read", "Write"],
     "defaultPrompt": [
       "Use Opsd to list my standalone businesses.",
       "Use Opsd to list my practices and their clients.",
