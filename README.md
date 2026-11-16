@@ -102,6 +102,7 @@ The ZIP is an initial package, not a completed public catalogue submission.
 ## Tools and authentication
 
 - `create_business` creates a standalone business with the connected user as admin.
+- `create_practice` creates a practice with its HMRC reporting identity and the connected user as admin.
 - `create_practice_business` creates a client owned by an existing practice, requiring practice admin membership.
 - `list_businesses` lists standalone businesses where the user has direct membership.
 - `get_business` looks up a business by its public ID, including access through a practice.
@@ -160,8 +161,9 @@ The ZIP is an initial package, not a completed public catalogue submission.
 The shared skill combines standalone businesses and practice clients for general
 business discovery. It keeps practice roles separate from business operational
 roles and identifies partial results if a practice lookup fails. It also routes
-standalone and practice-client creation, and explains how to handle uncertain
-outcomes without automatically creating duplicate businesses.
+practice, standalone and practice-client creation, and explains how to handle
+uncertain outcomes without automatically creating duplicate records. Practice
+creation distinguishes the display name from the HMRC reporting identity.
 
 The members skill distinguishes standalone business access from practice
 membership, and pending invitations from current members. Member and outgoing
@@ -219,7 +221,7 @@ existing rollover actions use reviewed versions. Starting or reconciling the
 final FPS can automatically send the new-year EPS. EPS acceptance completes the
 rollover and applies its saved next-year settings.
 
-There are sixty-one tools: thirty-five read-only tools, fourteen creation tools,
+There are sixty-two tools: thirty-five read-only tools, fifteen creation tools,
 eleven update tools and one deletion tool.
 OAuth requests `api:read`, `api:write`, and `hmrc:submit`. On the consent page,
 the user can approve any nonempty subset of these independent permissions. Lookups

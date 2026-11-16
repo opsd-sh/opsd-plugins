@@ -1,6 +1,6 @@
 ---
 name: businesses
-description: Find Opsd businesses and practices, report membership roles, or create standalone businesses and clients of an existing practice.
+description: Find Opsd businesses and practices, report membership roles, or create practices, standalone businesses and practice clients.
 ---
 
 Use the Opsd connection selected by the user or established in the conversation.
@@ -53,11 +53,16 @@ the request and context. A lookup that finds no match is not a request to create
 
 Names are trimmed and must contain 1–120 characters with no control characters.
 Creation adds the business record; payroll setup and enablement are separate
-operations. These tools cannot create a practice. Use the returned ID to identify
-the new business and report success only when the tool confirms creation.
+operations. Use the returned ID to identify the new business and report success
+only when the tool confirms creation.
 
-Each successful creation call creates a new business, even with an identical
-name. If a timeout, connection failure or internal error leaves the outcome
+For an explicit request to create a practice, follow [practice creation](references/practice-creation.md)
+and call `create_practice`. Obtain its display name and separate HMRC reporting
+name; the connected user becomes its admin. This is different from creating a
+client business within an existing practice.
+
+Each successful creation call creates a new business or practice, even with an
+identical name. If a timeout, connection failure or internal error leaves the outcome
 uncertain, do not automatically retry. Use the appropriate listing to help check
 what happened when Read permission is available; a matching name alone does not
 prove which call created it. Explain unresolved uncertainty and ask before
@@ -75,7 +80,7 @@ to the connected account; do not claim to know which. For an authentication
 failure, ask the user to reconnect the selected Opsd connection. For insufficient
 scope, explain which permission the operation needs: lookups require `api:read`
 and creation requires `api:write`. These are independent; Write alone permits
-creation when the required name and practice ID are already known. Ask the user
+creation when the required inputs are already known. Ask the user
 to reconnect with the missing permission when it is needed. For other failures,
 explain the returned problem and any indicated retry delay without presenting
 stale data as a successful lookup.
