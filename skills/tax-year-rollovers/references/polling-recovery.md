@@ -27,4 +27,5 @@ An old request cannot resume a later pause. On a version conflict or uncertain
 response, check the same rollover if Read is available; otherwise report that
 its current state needs review. Do not silently refresh the version, target a
 replacement rollover or repeatedly resume a fresh pause. Do not ask for HMRC
-credentials in chat; credential-based recovery needs a separate supported flow.
+credentials in chat. For a reconciliation pause, follow the separate
+[browser reconciliation flow](reconciliation.md).
