@@ -1,9 +1,9 @@
 ---
 name: members
-description: List Opsd business or practice members, their roles, and pending invitations sent or received. Use for account access questions, not employee payroll records.
+description: Inspect Opsd business or practice members and pending invitations, or invite someone with a chosen role. Use for account access questions, not employee payroll records.
 ---
 
-Use the selected Opsd connection. For member or outgoing invitation lookups,
+Use the selected Opsd connection. For member lookups or outgoing invitations,
 resolve the business or practice using the businesses skill when its ID is not
 already known. Received invitations can be listed without existing membership.
 
@@ -50,14 +50,20 @@ excluded. An empty result means no current pending invitations in that list,
 not that nobody has ever been invited. Do not treat a pending invitee as an
 existing member or an invitation record as proof that its email was delivered.
 
-All six tools require `api:read` and only inspect access. They do not change
-memberships or send, accept or decline invitations. Match names or emails locally.
-Member and outgoing invitation tools take the relevant business or practice ID;
-received invitation tools take no arguments.
+The six lookup tools require `api:read` and only inspect access. Match names or
+emails locally. Member and outgoing invitation tools take the relevant business
+or practice ID; received invitation tools take no arguments.
+
+To invite someone, read the [invitation creation guide](references/invitation-creation.md)
+before calling `create_business_invitation` or `create_practice_invitation`.
+These require `api:write` and the relevant admin role, and queue an email.
+Practice invitations grant access to all client businesses on acceptance;
+do not turn a request for one client's access into a practice invitation
+without the user agreeing to that broader access.
 
 Keep failed lookups separate from empty results. A not-found response may mean
 missing or inaccessible; a forbidden response requires the appropriate admin
-role for member and outgoing invitation listings. Reconnecting with Read
-permission addresses insufficient scope, not a missing admin role. For
-authentication failures, reconnect the selected Opsd connection. If a lookup
-fails, identify the gap in any combined results.
+role for member lookups and outgoing invitations. Reconnect with the missing
+Read or Write permission for insufficient scope; this cannot grant a missing
+admin role. For authentication failures, reconnect the selected Opsd connection.
+If a lookup fails, identify the gap in any combined results.
