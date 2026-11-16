@@ -10,8 +10,8 @@ a version after a conflict.
 The run must be finalized and every previous attempt must be rejected or
 confirmed not sent. A rejected latest attempt does not make an older uncertain
 attempt safe to resend. Pending, unknown and paused outcomes need the relevant
-recovery operation. Accepted, cancelled, draft and reopened runs cannot be
-retried. The existing worker rechecks the version, membership, payroll agreement,
+recovery operation; see [reconciliation guidance](reconciliation.md). Accepted, cancelled, draft and reopened runs cannot be
+retried. Confirmation rechecks membership; the worker rechecks version, payroll agreement,
 suspension, ownership, HMRC retry delay and saved submission environment.
 
 Show the returned link to the user. They must sign in with the same Opsd account,

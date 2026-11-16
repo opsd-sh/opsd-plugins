@@ -35,7 +35,8 @@ the link unused, but a changed run requires a fresh review and new link. A later
 HMRC rejection does not make a consumed link reusable. Reopening and finalizing
 creates a new revision; retrying resends the same frozen revision through a
 separate browser confirmation. Follow [retry guidance](retry.md) when that is
-the intended action. Reconciliation recovery is not yet available.
+the intended action. For uncertain outcomes needing credentials or paused
+reconciliation, follow [reconciliation guidance](reconciliation.md).
 
 After confirmation, check the same run and its history when Read is granted.
 With Submit alone, the user can use “Check status” on the browser page while the

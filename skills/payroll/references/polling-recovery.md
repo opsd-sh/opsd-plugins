@@ -16,8 +16,8 @@ Business admins and payroll operators, including practice members, may resume
 polling. The payroll agreement must be active, no applicable business or
 practice payroll suspension may be active, and no worker may currently own
 the run. Explain failures without changing billing or payroll state to bypass
-them. Other pause states require their own recovery process; reconciliation
-recovery is not yet available through these tools.
+them. For other pause states, follow
+[reconciliation guidance](reconciliation.md).
 
 The action records the user's decision, advances the run version and resumes
 the same attempt in the managed background worker. It retains the revision,

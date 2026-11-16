@@ -142,6 +142,7 @@ The ZIP is an initial package, not a completed public catalogue submission.
 - `resume_payroll_run_polling` resumes paused HMRC status checks for an existing submission in the background.
 - `create_payroll_run_submission_link` creates an expiring browser link for the user to confirm payroll submission with one-off HMRC credentials.
 - `create_payroll_run_retry_link` creates a browser link to retry an eligible frozen payroll revision with one-off HMRC credentials.
+- `create_payroll_run_reconciliation_link` creates a browser link to resume checks on an uncertain submission using the original sender’s password.
 - `list_payroll_runs` lists payroll runs and their states.
 - `get_payroll_run` returns one run with its saved payments and calculation.
 - `preview_payroll_run` calculates a draft or reopened run without saving results.
@@ -200,13 +201,14 @@ and historical submissions. Submission guidance covers same-account browser
 confirmation, expiring links, reviewed versions and uncertain outcomes. The user
 enters credentials directly on the Opsd page; creating a link does not submit.
 Retry guidance preserves frozen inputs and distinguishes safe retries from
-reopening for corrections or recovering an uncertain submission.
+reopening for corrections or recovering an uncertain submission. Reconciliation
+guidance resumes the existing attempt without resending payroll.
 
 The tax-year-rollovers skill distinguishes final FPS and new-year EPS progress,
 retained cancelled operations and submission retries. It supports reading status
 and history without starting or recovering a rollover.
 
-There are fifty-four tools: thirty-five read-only tools, nine creation tools,
+There are fifty-five tools: thirty-five read-only tools, ten creation tools,
 nine update tools and one deletion tool.
 OAuth requests `api:read`, `api:write`, and `hmrc:submit`. On the consent page,
 the user can approve any nonempty subset of these independent permissions. Lookups
