@@ -1,11 +1,12 @@
 ---
 name: payroll-setup
-description: Inspect or create PAYE schemes and pay schedules in Opsd, and read practice HMRC reporting details. Use for payroll setup and selection.
+description: Inspect or create PAYE schemes and pay schedules in Opsd, and read or replace practice HMRC reporting details. Use for payroll setup and selection.
 ---
 
 Use the Opsd connection selected by the user or established in the conversation.
-The three lookup tools require `api:read`; the two creation tools require
-`api:write`. Write alone permits creation when the necessary inputs are known.
+The three lookup tools require `api:read`; creation and reporting replacement
+require `api:write`. Write alone permits those operations when the necessary
+inputs are known. Reporting replacement also requires practice admin membership.
 
 For business payroll setup, use the selected business. If it is unclear, use
 the [business discovery skill](../businesses/SKILL.md) to resolve it, including
@@ -77,6 +78,11 @@ stored name, address and contact details as returned; null optional fields mean
 not recorded. These are current saved reporting details, not Government Gateway
 credentials, proof of HMRC acceptance, or a record of what a past submission
 contained. Do not request HMRC credentials for these lookups.
+
+To update a practice's reporting details, read the
+[reporting replacement guide](references/reporting-replacement.md) before calling
+`replace_practice_hmrc_reporting`. It replaces the complete identity; omitted
+optional fields are cleared.
 
 A successful empty list means no schemes or schedules were returned for that
 business. If a lookup fails or its tool is unavailable, explain which part

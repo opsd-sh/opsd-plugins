@@ -109,6 +109,7 @@ The ZIP is an initial package, not a completed public catalogue submission.
 - `list_practices` lists practices and the user's role in each.
 - `get_practice` looks up a practice by its public ID.
 - `get_practice_hmrc_reporting` reads its stored HMRC reporting identity and contact details.
+- `replace_practice_hmrc_reporting` replaces those details, requiring practice admin membership. Omitted optional fields are cleared.
 - `list_practice_businesses` lists the businesses owned by a practice.
 - `list_business_members` and `list_practice_members` list user accounts and roles.
 - `list_outgoing_business_invitations` and `list_outgoing_practice_invitations`
@@ -181,7 +182,9 @@ suspension remain separate facts.
 The payroll-setup skill helps select or create schemes and schedules within the
 chosen business, using IDs to match schedules to their schemes. It explains
 required settings, duplicate employer references and uncertain creation outcomes.
-It also covers practice HMRC reporting details, which any practice member can read.
+It also covers practice HMRC reporting details, which any practice member can read
+and admins can replace. Replacement guidance explains field clearing and how to
+preserve unchanged details during a partial change.
 
 The employees skill distinguishes people from their employments, matches them
 by ID and helps interpret stored settings without calculating payroll. It also
@@ -221,8 +224,8 @@ existing rollover actions use reviewed versions. Starting or reconciling the
 final FPS can automatically send the new-year EPS. EPS acceptance completes the
 rollover and applies its saved next-year settings.
 
-There are sixty-two tools: thirty-five read-only tools, fifteen creation tools,
-eleven update tools and one deletion tool.
+There are sixty-three tools: thirty-five read-only tools, fifteen creation tools,
+twelve update tools and one deletion tool.
 OAuth requests `api:read`, `api:write`, and `hmrc:submit`. On the consent page,
 the user can approve any nonempty subset of these independent permissions. Lookups
 require `api:read`; payroll submission and retry links require `hmrc:submit`;
