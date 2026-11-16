@@ -151,6 +151,7 @@ The ZIP is an initial package, not a completed public catalogue submission.
 - `get_tax_year_rollover` returns current progress and recorded decisions.
 - `get_tax_year_rollover_history` returns attempts and outcomes for both stages.
 - `cancel_tax_year_rollover` cancels an eligible rollover while retaining its history and source tax year.
+- `resume_tax_year_rollover_polling` resumes paused status checks for the existing final FPS or new-year EPS attempt.
 
 The shared skill combines standalone businesses and practice clients for general
 business discovery. It keeps practice roles separate from business operational
@@ -207,14 +208,16 @@ guidance resumes the existing attempt without resending payroll.
 
 The tax-year-rollovers skill distinguishes final FPS and new-year EPS progress,
 retained cancelled operations and submission retries. It supports reading status
-and history, plus explicit cancellation of eligible rollovers using reviewed
-versions. Starting, retrying and resuming rollovers are not yet supported.
+and history, explicit cancellation and paused polling recovery using reviewed
+versions. Polling can advance or complete a rollover and apply its saved next-year
+settings. Starting, retrying and credential-based recovery are not yet supported.
 
-There are fifty-six tools: thirty-five read-only tools, ten creation tools,
-ten update tools and one deletion tool.
+There are fifty-seven tools: thirty-five read-only tools, ten creation tools,
+eleven update tools and one deletion tool.
 OAuth requests `api:read`, `api:write`, and `hmrc:submit`. On the consent page,
 the user can approve any nonempty subset of these independent permissions. Lookups
-require `api:read`; payroll submission and retry links require `hmrc:submit`; other
+require `api:read`; payroll submission and retry links require `hmrc:submit`;
+rollover polling recovery requires both `api:write` and `hmrc:submit`; other
 creation, updates and deletion require `api:write`. Write alone permits those
 operations when the required inputs are known. Submit alone permits a submission
 link when its IDs and reviewed version are known. Opserver enforces the
