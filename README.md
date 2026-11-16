@@ -17,7 +17,7 @@ skills/billing/SKILL.md          Agreements, invoices and live payment setup
 skills/payroll-setup/SKILL.md    Payroll setup and practice HMRC reporting
 skills/employees/SKILL.md        Employee and employment discovery
 skills/payroll/SKILL.md          Draft payments, previews and payroll history
-skills/tax-year-rollovers/SKILL.md  Tax-year rollover progress, cancellation and history
+skills/tax-year-rollovers/SKILL.md  Tax-year rollover approval, progress and recovery
 providers/openai/plugin.json     OpenAI manifest defaults
 providers/openai/mcp.json        OpenAI MCP connection defaults
 production.json                 Production identity and endpoint
@@ -152,6 +152,7 @@ The ZIP is an initial package, not a completed public catalogue submission.
 - `get_tax_year_rollover_history` returns attempts and outcomes for both stages.
 - `cancel_tax_year_rollover` cancels an eligible rollover while retaining its history and source tax year.
 - `resume_tax_year_rollover_polling` resumes paused status checks for the existing final FPS or new-year EPS attempt.
+- `create_tax_year_rollover_submission_link` creates browser approval to start the supported year-end transition with an explicit allowance choice and coding notices.
 - `create_tax_year_rollover_reconciliation_link` creates a same-account browser approval for recovering an existing attempt, including automatic EPS continuation after FPS acceptance.
 - `create_tax_year_rollover_retry_link` creates browser approval to retry an eligible final FPS or new-year EPS using the saved decisions.
 - `create_tax_year_rollover_eps_submission_link` creates browser approval to send the new-year EPS when the final FPS is accepted and the rollover is waiting for credentials.
@@ -211,17 +212,19 @@ guidance resumes the existing attempt without resending payroll.
 
 The tax-year-rollovers skill distinguishes final FPS and new-year EPS progress,
 retained cancelled operations and submission retries. It supports reading status
-and history, explicit cancellation, paused polling recovery, browser
-reconciliation, retry and EPS submission using reviewed versions. FPS reconciliation can automatically send
-the new-year EPS. EPS acceptance completes the rollover and applies its saved
-next-year settings. Starting a rollover is not yet supported.
+and history, new rollover approval, explicit cancellation, paused polling
+recovery, browser reconciliation, retry and EPS submission. Starting requires a
+reviewed scheme generation and explicit allowance and tax-code decisions;
+existing rollover actions use reviewed versions. Starting or reconciling the
+final FPS can automatically send the new-year EPS. EPS acceptance completes the
+rollover and applies its saved next-year settings.
 
-There are sixty tools: thirty-five read-only tools, thirteen creation tools,
+There are sixty-one tools: thirty-five read-only tools, fourteen creation tools,
 eleven update tools and one deletion tool.
 OAuth requests `api:read`, `api:write`, and `hmrc:submit`. On the consent page,
 the user can approve any nonempty subset of these independent permissions. Lookups
 require `api:read`; payroll submission and retry links require `hmrc:submit`;
-rollover polling recovery, reconciliation, retry and EPS submission links require
+rollover start, polling recovery, reconciliation, retry and EPS submission links require
 both `api:write` and `hmrc:submit`; other creation, updates and deletion require
 `api:write`. Write alone permits those
 operations when the required inputs are known. Submit alone permits a submission

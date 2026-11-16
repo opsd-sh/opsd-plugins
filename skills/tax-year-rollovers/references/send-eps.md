@@ -36,5 +36,5 @@ does not establish HMRC acceptance or completion.
 On expiry, conflict or an uncertain response, review the same rollover before
 further action. Do not silently refresh the version, create another link,
 resubmit credentials or choose a replacement rollover. Use the separate
-[retry flow](retry.md) for an eligible failed EPS attempt. Starting a rollover
-is not yet supported.
+[retry flow](retry.md) for an eligible failed EPS attempt. A [new rollover](start.md)
+needs its own explicit request and reviewed decisions.
