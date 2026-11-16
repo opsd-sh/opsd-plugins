@@ -19,7 +19,8 @@ saved rollover decisions or require Government Gateway credentials.
 
 The response normally shows `pending`; that is not acceptance or completion.
 With Read, check the same rollover later to report progress. Final FPS acceptance
-can leave the rollover waiting for credentials to send the new-year EPS. EPS
+can leave the rollover waiting for credentials to send the new-year EPS; use
+the [EPS submission flow](send-eps.md) for an explicit request to continue. EPS
 acceptance completes the rollover and applies its saved next-year settings.
 Do not claim the source tax year has advanced on final FPS acceptance alone.
 
