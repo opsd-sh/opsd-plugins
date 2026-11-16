@@ -113,6 +113,7 @@ The ZIP is an initial package, not a completed public catalogue submission.
 - `list_practice_businesses` lists the businesses owned by a practice.
 - `list_business_members` and `list_practice_members` list user accounts and roles.
 - `create_business_invitation` and `create_practice_invitation` create pending invitations with an explicit role and queue an email, requiring the relevant admin role.
+- `cancel_business_invitation` and `cancel_practice_invitation` cancel open outgoing invitations, including expired ones, requiring the relevant admin role.
 - `list_outgoing_business_invitations` and `list_outgoing_practice_invitations`
   list pending, unexpired invitations sent by the business or practice.
 - `list_business_invitations` and `list_practice_invitations` list pending,
@@ -173,7 +174,9 @@ invitation listings require the relevant admin role. Received invitation tools
 use the authenticated recipient and do not require membership of the inviting
 business or practice. The two invitation creation tools require Write and the
 relevant admin role. The skill explains role selection, practice-wide access,
-queued email delivery, conflicts, expiry and uncertain outcomes.
+queued email delivery, conflicts, expiry and uncertain outcomes. Cancellation
+guidance distinguishes withdrawing an invitation from removing a member, and
+keeps retries tied to the exact invitation ID.
 
 The billing skill distinguishes payroll agreement status from billing suspension,
 and standalone subscriptions from practice client enablement. It also explains
@@ -227,8 +230,8 @@ existing rollover actions use reviewed versions. Starting or reconciling the
 final FPS can automatically send the new-year EPS. EPS acceptance completes the
 rollover and applies its saved next-year settings.
 
-There are sixty-five tools: thirty-five read-only tools, seventeen creation tools,
-twelve update tools and one deletion tool.
+There are sixty-seven tools: thirty-five read-only tools, seventeen creation tools,
+fourteen update tools and one deletion tool.
 OAuth requests `api:read`, `api:write`, and `hmrc:submit`. On the consent page,
 the user can approve any nonempty subset of these independent permissions. Lookups
 require `api:read`; payroll submission and retry links require `hmrc:submit`;

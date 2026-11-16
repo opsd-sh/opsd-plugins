@@ -1,6 +1,6 @@
 ---
 name: members
-description: Inspect Opsd business or practice members and pending invitations, or invite someone with a chosen role. Use for account access questions, not employee payroll records.
+description: Inspect Opsd business or practice members and pending invitations, invite someone with a chosen role, or cancel an outgoing invitation. Use for account access questions, not employee payroll records.
 ---
 
 Use the selected Opsd connection. For member lookups or outgoing invitations,
@@ -60,6 +60,12 @@ These require `api:write` and the relevant admin role, and queue an email.
 Practice invitations grant access to all client businesses on acceptance;
 do not turn a request for one client's access into a practice invitation
 without the user agreeing to that broader access.
+
+To withdraw an outgoing invitation, read the
+[cancellation guide](references/invitation-cancellation.md) before calling
+`cancel_business_invitation` or `cancel_practice_invitation`. Both require
+Write and the relevant admin role. Cancellation prevents acceptance; it does
+not remove existing membership or recall an email.
 
 Keep failed lookups separate from empty results. A not-found response may mean
 missing or inaccessible; a forbidden response requires the appropriate admin

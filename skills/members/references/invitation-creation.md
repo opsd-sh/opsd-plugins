@@ -33,7 +33,9 @@ An existing member or active pending invitation causes a conflict. Creation
 cannot update an active invitation's role or resend its email. If Read
 permission is available, inspect the corresponding member or outgoing
 invitation list to explain the conflict. Do not change the recipient or role
-merely to bypass it, or claim the requested role was granted.
+merely to bypass it, or claim the requested role was granted. Do not automatically
+cancel the existing invitation to bypass a conflict. For an explicit withdrawal
+request, follow the [cancellation guide](invitation-cancellation.md).
 
 An expired open invitation can be reissued; its public ID, role and expiry are
 replaced and another email is queued. The previous link stops working. This is
