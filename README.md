@@ -140,6 +140,7 @@ The ZIP is an initial package, not a completed public catalogue submission.
 - `reopen_payroll_run` reopens an eligible finalized run for corrections, preserving saved payments and submission history.
 - `cancel_payroll_run` marks an eligible finalized or reopened run as cancelled, retaining its records and submission history.
 - `resume_payroll_run_polling` resumes paused HMRC status checks for an existing submission in the background.
+- `create_payroll_run_submission_link` creates an expiring browser link for the user to confirm payroll submission with one-off HMRC credentials.
 - `list_payroll_runs` lists payroll runs and their states.
 - `get_payroll_run` returns one run with its saved payments and calculation.
 - `preview_payroll_run` calculates a draft or reopened run without saving results.
@@ -194,18 +195,22 @@ withdrawing an HMRC submission, and explains which payment inputs are returned.
 Polling recovery guidance distinguishes resuming status checks from sending
 a new submission, and explains saved delays and background outcomes.
 The skill also helps select a run and distinguish live previews, saved calculations
-and historical submissions. These tools do not finalize payroll or send a new submission to HMRC.
+and historical submissions. Submission guidance covers same-account browser
+confirmation, expiring links, reviewed versions and uncertain outcomes. The user
+enters credentials directly on the Opsd page; creating a link does not submit.
 
 The tax-year-rollovers skill distinguishes final FPS and new-year EPS progress,
 retained cancelled operations and submission retries. It supports reading status
 and history without starting or recovering a rollover.
 
-There are fifty-two tools: thirty-five read-only tools, seven creation tools,
+There are fifty-three tools: thirty-five read-only tools, eight creation tools,
 nine update tools and one deletion tool.
 OAuth requests `api:read`, `api:write`, and `hmrc:submit`. On the consent page,
 the user can approve any nonempty subset of these independent permissions. Lookups
-require `api:read`; creation, updates and deletion require `api:write`. Write alone
-permits these operations when the required inputs are known. Opserver enforces the
+require `api:read`; payroll submission links require `hmrc:submit`; other
+creation, updates and deletion require `api:write`. Write alone permits those
+operations when the required inputs are known. Submit alone permits a submission
+link when its IDs and reviewed version are known. Opserver enforces the
 granted scopes alongside the user's existing membership and role permissions.
 
 The listing's Read and Write capabilities describe the available tools; the
