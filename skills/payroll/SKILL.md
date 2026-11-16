@@ -1,6 +1,6 @@
 ---
 name: payroll
-description: Create, edit or discard payroll drafts, reopen or cancel eligible runs, resume paused HMRC polling, preview calculations and inspect saved payments and submission history in Opsd. Arrange browser confirmation to finalize and submit payroll with one-off HMRC credentials. Use for payroll preparation, submission and questions.
+description: Create, edit or discard payroll drafts, reopen or cancel eligible runs, resume paused HMRC polling, preview calculations and inspect saved payments and submission history in Opsd. Arrange browser confirmation to submit or retry payroll with one-off HMRC credentials. Use for payroll preparation, submission and questions.
 ---
 
 Use the Opsd connection and business selected by the user or established in the
@@ -8,7 +8,7 @@ conversation. If needed, resolve the business with the [business discovery skill
 including practice clients. Draft creation, edits, deletion, reopening,
 cancellation and resuming polling require `api:write`; the four read tools require `api:read`.
 Write alone permits these operations when the required IDs and inputs are known.
-Creating a submission link requires `hmrc:submit`; it does not require Read or
+Creating a submission or retry link requires `hmrc:submit`; it does not require Read or
 Write when the business ID, run ID and reviewed version are already known.
 
 For draft creation, read [draft creation guidance](references/draft-creation.md)
@@ -38,6 +38,11 @@ To finalize and submit a draft or reopened run, read
 `create_payroll_run_submission_link`. The user enters HMRC credentials and
 confirms on the returned Opsd page. Never ask for or enter those credentials
 in chat or tool calls. Creating or opening the link does not submit payroll.
+
+To retry the same frozen revision after rejection or confirmation it was not sent,
+read [retry guidance](references/retry.md) before calling
+`create_payroll_run_retry_link`. The user reviews and confirms the retry in the
+browser. Retry preserves the frozen inputs; use reopening for corrections.
 
 To resume paused status checks for an existing submission, read
 [polling recovery guidance](references/polling-recovery.md) before calling
@@ -100,14 +105,14 @@ employees or HMRC have been paid.
 
 `available_actions` describes recovery options for the run's current state; it
 does not grant OAuth permissions or mean the connected tools can execute them.
-Report the returned guidance and any `preparation_failure`. Retry and
-reconciliation recovery tools are not yet available. Finalization uses browser
-confirmation; no current payroll tool accepts HMRC credentials.
+Report the returned guidance and any `preparation_failure`. Reconciliation
+recovery is not yet available. Finalization and retry use browser confirmation;
+no current payroll tool accepts HMRC credentials.
 
 Keep failures separate from empty results. A not-found error can mean a missing
 or inaccessible business, or a run absent from the supplied business. Explain
 which lookup failed and label any partial results. For insufficient scope, ask
 the user to reconnect with the permission required by that operation: Write for
 creation, edits, deletion, reopening, cancellation and resuming polling, or Read
-for lookups and previews, or Submit to HMRC for submission links.
+for lookups and previews, or Submit to HMRC for submission or retry links.
 For authentication failure, ask them to reconnect the same Opsd connection.

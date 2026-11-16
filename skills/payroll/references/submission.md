@@ -33,15 +33,16 @@ Starting finalization consumes the link atomically with creating the submission
 attempt. Repeated confirmations cannot send it again. Failed preparation leaves
 the link unused, but a changed run requires a fresh review and new link. A later
 HMRC rejection does not make a consumed link reusable. Reopening and finalizing
-creates a new revision; retrying would resend the same frozen revision and is
-not yet available through these tools. Reconciliation recovery is also not yet
-available.
+creates a new revision; retrying resends the same frozen revision through a
+separate browser confirmation. Follow [retry guidance](retry.md) when that is
+the intended action. Reconciliation recovery is not yet available.
 
 After confirmation, check the same run and its history when Read is granted.
 With Submit alone, the user can use “Check status” on the browser page while the
 link is valid. A used link shows its original attempt and frozen pay amounts,
 even if someone later retries or reopens the run. Other tools show the current
-run or its history; distinguish that from this particular submission. A network error does not establish whether submission started:
+run or its history; distinguish that from this particular submission. A network
+error does not establish whether submission started:
 check status before taking another action. Do not automatically create another
 link, refresh the version or resubmit after an uncertain outcome. If an unused
 link expires, a replacement still needs the same intended run and a valid,
