@@ -1,12 +1,13 @@
 ---
 name: tax-year-rollovers
-description: Find a PAYE scheme's tax-year rollovers and inspect final FPS and new-year EPS progress, submission attempts and recovery history. Use for read-only year-end status questions, not starting, retrying, resuming or cancelling a rollover.
+description: Find a PAYE scheme's tax-year rollovers and inspect final FPS and new-year EPS progress, submission attempts and recovery history. Use for year-end status questions and cancelling an eligible rollover, not starting, retrying or resuming one.
 ---
 
 Use the Opsd connection and business selected by the user or established in the
 conversation. Resolve an unclear business with the [business discovery skill](../businesses/SKILL.md),
 including practice clients, and select its PAYE scheme with the [payroll setup skill](../payroll-setup/SKILL.md).
-All three tools require `api:read`.
+The three lookup tools require `api:read`. Cancellation requires `api:write`,
+independently of Read or Submit; known IDs and a reviewed version are sufficient.
 
 - Call `list_tax_year_rollovers` with `business_id` and `paye_scheme_id` to find
   rollovers. It includes completed and cancelled records, newest created first.
@@ -18,6 +19,10 @@ All three tools require `api:read`.
 - Call `get_tax_year_rollover_history` with the same three IDs for attempts,
   outcomes, recorded actions and preparation failures grouped under `final_fps`
   and `new_year_eps`.
+
+For an explicit request to cancel, follow [cancellation](references/cancellation.md)
+and call `cancel_tax_year_rollover`. A status lookup does not authorize cancellation.
+Starting, retrying and resuming rollovers are not yet available through these tools.
 
 A scheme retains rollovers across tax years and can have cancelled replacements
 for the same transition. Only one rollover can be active at a time. Match the
@@ -45,11 +50,12 @@ the whole rollover is absent or complete.
 The allowance choice and tax-code notices are saved rollover decisions, not a
 fresh eligibility assessment or the current employment settings. Report public
 messages and preparation failures. `available_actions` describes state-dependent
-options; it neither grants OAuth permissions nor means these tools can execute
-them. These tools read saved state without contacting HMRC. Do not request
-Government Gateway credentials or carry out recovery actions for a status lookup.
+options; it does not grant OAuth permissions. Lookup tools read saved state
+without contacting HMRC. Do not request Government Gateway credentials or carry
+out recovery actions for a status lookup.
 
 Keep failed lookups distinct from empty lists and label partial results. A
 not-found error can mean a missing or inaccessible business, or mismatched
 scheme and rollover IDs. For insufficient scope, ask the user to reconnect with
-Read permission; for authentication failure, reconnect the same Opsd connection.
+Read permission for lookups or Write for cancellation. For authentication failure,
+reconnect the same Opsd connection.

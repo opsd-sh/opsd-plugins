@@ -17,7 +17,7 @@ skills/billing/SKILL.md          Agreements, invoices and live payment setup
 skills/payroll-setup/SKILL.md    Payroll setup and practice HMRC reporting
 skills/employees/SKILL.md        Employee and employment discovery
 skills/payroll/SKILL.md          Draft payments, previews and payroll history
-skills/tax-year-rollovers/SKILL.md  Tax-year rollover progress and history
+skills/tax-year-rollovers/SKILL.md  Tax-year rollover progress, cancellation and history
 providers/openai/plugin.json     OpenAI manifest defaults
 providers/openai/mcp.json        OpenAI MCP connection defaults
 production.json                 Production identity and endpoint
@@ -150,6 +150,7 @@ The ZIP is an initial package, not a completed public catalogue submission.
 - `list_tax_year_rollovers` lists a PAYE scheme's rollovers.
 - `get_tax_year_rollover` returns current progress and recorded decisions.
 - `get_tax_year_rollover_history` returns attempts and outcomes for both stages.
+- `cancel_tax_year_rollover` cancels an eligible rollover while retaining its history and source tax year.
 
 The shared skill combines standalone businesses and practice clients for general
 business discovery. It keeps practice roles separate from business operational
@@ -206,10 +207,11 @@ guidance resumes the existing attempt without resending payroll.
 
 The tax-year-rollovers skill distinguishes final FPS and new-year EPS progress,
 retained cancelled operations and submission retries. It supports reading status
-and history without starting or recovering a rollover.
+and history, plus explicit cancellation of eligible rollovers using reviewed
+versions. Starting, retrying and resuming rollovers are not yet supported.
 
-There are fifty-five tools: thirty-five read-only tools, ten creation tools,
-nine update tools and one deletion tool.
+There are fifty-six tools: thirty-five read-only tools, ten creation tools,
+ten update tools and one deletion tool.
 OAuth requests `api:read`, `api:write`, and `hmrc:submit`. On the consent page,
 the user can approve any nonempty subset of these independent permissions. Lookups
 require `api:read`; payroll submission and retry links require `hmrc:submit`; other
