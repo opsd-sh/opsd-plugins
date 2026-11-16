@@ -36,6 +36,7 @@ progress; without it, direct the user to the confirmation page's status check.
 If approval expires, the version changes or the response is uncertain, review
 the same rollover before requesting another link. Do not silently refresh the
 version, switch to a replacement rollover or retry. A later pause of the same
-attempt needs a fresh review and link. This tool does not retry a submission.
+attempt needs a fresh review and link. This tool does not retry a submission; use the [retry flow](retry.md) only
+after rejection or confirmed non-transmission.
 For an accepted final FPS waiting for credentials to send its EPS, use the
 separate [EPS submission flow](send-eps.md).

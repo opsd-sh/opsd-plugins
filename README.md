@@ -153,6 +153,7 @@ The ZIP is an initial package, not a completed public catalogue submission.
 - `cancel_tax_year_rollover` cancels an eligible rollover while retaining its history and source tax year.
 - `resume_tax_year_rollover_polling` resumes paused status checks for the existing final FPS or new-year EPS attempt.
 - `create_tax_year_rollover_reconciliation_link` creates a same-account browser approval for recovering an existing attempt, including automatic EPS continuation after FPS acceptance.
+- `create_tax_year_rollover_retry_link` creates browser approval to retry an eligible final FPS or new-year EPS using the saved decisions.
 - `create_tax_year_rollover_eps_submission_link` creates browser approval to send the new-year EPS when the final FPS is accepted and the rollover is waiting for credentials.
 
 The shared skill combines standalone businesses and practice clients for general
@@ -211,16 +212,16 @@ guidance resumes the existing attempt without resending payroll.
 The tax-year-rollovers skill distinguishes final FPS and new-year EPS progress,
 retained cancelled operations and submission retries. It supports reading status
 and history, explicit cancellation, paused polling recovery, browser
-reconciliation and EPS submission using reviewed versions. FPS reconciliation can automatically send
+reconciliation, retry and EPS submission using reviewed versions. FPS reconciliation can automatically send
 the new-year EPS. EPS acceptance completes the rollover and applies its saved
-next-year settings. Starting and retrying submissions are not yet supported.
+next-year settings. Starting a rollover is not yet supported.
 
-There are fifty-nine tools: thirty-five read-only tools, twelve creation tools,
+There are sixty tools: thirty-five read-only tools, thirteen creation tools,
 eleven update tools and one deletion tool.
 OAuth requests `api:read`, `api:write`, and `hmrc:submit`. On the consent page,
 the user can approve any nonempty subset of these independent permissions. Lookups
 require `api:read`; payroll submission and retry links require `hmrc:submit`;
-rollover polling recovery, reconciliation links and EPS submission links require
+rollover polling recovery, reconciliation, retry and EPS submission links require
 both `api:write` and `hmrc:submit`; other creation, updates and deletion require
 `api:write`. Write alone permits those
 operations when the required inputs are known. Submit alone permits a submission

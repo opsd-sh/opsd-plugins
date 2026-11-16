@@ -1,14 +1,14 @@
 ---
 name: tax-year-rollovers
-description: Find a PAYE scheme's tax-year rollovers and inspect final FPS and new-year EPS progress, submission attempts and recovery history. Use for year-end status questions, cancelling an eligible rollover or resuming paused status polling. Use browser approval to recover an uncertain submission or send the new-year EPS after final FPS acceptance. Starting and retrying submissions are not yet supported.
+description: Find a PAYE scheme's tax-year rollovers and inspect final FPS and new-year EPS progress, submission attempts and recovery history. Use for year-end status questions, cancelling an eligible rollover or resuming paused status polling. Use browser approval to recover an uncertain submission, retry a rejected or confirmed-unsent attempt, or send the new-year EPS after final FPS acceptance. Starting a rollover is not yet supported.
 ---
 
 Use the Opsd connection and business selected by the user or established in the
 conversation. Resolve an unclear business with the [business discovery skill](../businesses/SKILL.md),
 including practice clients, and select its PAYE scheme with the [payroll setup skill](../payroll-setup/SKILL.md).
 The three lookup tools require `api:read`. Cancellation requires `api:write`,
-independently of Read or Submit. Resuming polling and creating reconciliation or EPS submission links require
-both `api:write` and `hmrc:submit`, matching the REST rollover resume action. These actions do not require
+independently of Read or Submit. Resuming polling and creating reconciliation, retry or EPS submission links require
+both `api:write` and `hmrc:submit`, matching the REST rollover actions. These actions do not require
 Read when the IDs and reviewed version are already known.
 
 - Call `list_tax_year_rollovers` with `business_id` and `paye_scheme_id` to find
@@ -31,8 +31,9 @@ follow [browser reconciliation](references/reconciliation.md) and call
 automatically send the new-year EPS and complete the rollover. When the final FPS
 is accepted and the rollover is waiting for credentials to send the EPS, follow
 [EPS submission](references/send-eps.md) and call
-`create_tax_year_rollover_eps_submission_link`. Starting a rollover and retrying
-a rejected or confirmed not-sent submission are not yet available through these tools.
+`create_tax_year_rollover_eps_submission_link`. For an explicit request to retry
+a rejected or confirmed not-sent attempt, follow [submission retry](references/retry.md)
+and call `create_tax_year_rollover_retry_link`. Starting a rollover is not yet available.
 
 A scheme retains rollovers across tax years and can have cancelled replacements
 for the same transition. Only one rollover can be active at a time. Match the
@@ -68,5 +69,5 @@ Keep failed lookups distinct from empty lists and label partial results. A
 not-found error can mean a missing or inaccessible business, or mismatched
 scheme and rollover IDs. For insufficient scope, ask the user to reconnect with
 Read permission for lookups, Write for cancellation, or both Write and Submit for
-polling recovery, reconciliation links or EPS submission links. For authentication failure, reconnect
+polling recovery, reconciliation, retry or EPS submission links. For authentication failure, reconnect
 the same Opsd connection.
