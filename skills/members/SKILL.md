@@ -1,6 +1,6 @@
 ---
 name: members
-description: Inspect Opsd business or practice members and pending invitations, invite someone with a chosen role, or cancel an outgoing invitation. Use for account access questions, not employee payroll records.
+description: Inspect Opsd business or practice members and invitations, and create, accept or cancel invitations. Use for account access questions, not employee payroll records.
 ---
 
 Use the selected Opsd connection. For member lookups or outgoing invitations,
@@ -19,6 +19,13 @@ recipient. Results include invitation IDs, business or practice IDs and names,
 inviter emails, offered roles and expiry times. Use those names and IDs to
 identify invitations; the recipient may not yet have access to retrieve the
 business or practice. An offered role is not an existing membership.
+
+To join through a received invitation, read the
+[acceptance guide](references/invitation-acceptance.md) before calling
+`accept_business_invitation` or `accept_practice_invitation`. Both require
+`api:write` and an invitation addressed to the connected account; existing
+membership or an admin role is not required. Acceptance grants the stored
+offered role. A practice invitation covers all its client businesses.
 
 For members or invitations sent by an entity:
 
