@@ -1,6 +1,6 @@
 ---
 name: billing
-description: Start or cancel standalone payroll subscriptions, select saved payment defaults, and inspect Opsd billing and invoices. Use for payroll access, billing status, charge breakdowns and payment preferences, not payroll calculations.
+description: Manage standalone payroll subscriptions and practice-client payroll enablement, select saved payment defaults, and inspect Opsd billing and invoices. Use for payroll access, billing status, charge breakdowns and payment preferences, not payroll calculations.
 ---
 
 Use the selected Opsd connection. Resolve the business and, for a practice
@@ -41,12 +41,14 @@ To change the default payment method, read the
 These require `api:write` and the relevant admin role. Practice selection changes
 the shared payer's billing preference, not an individual client's setup.
 
-To start, restart or cancel a standalone payroll agreement, read the
+To start or end a payroll agreement, read the
 [subscription guide](references/payroll-subscription.md) before calling
-`subscribe_business_to_payroll` or `cancel_business_payroll_subscription`.
-Both require `api:write`, direct business admin membership and a reviewed
-`expected_version`. Starting incurs monthly fees; cancellation takes effect
-immediately. Practice-client enablement is a separate operation.
+`subscribe_business_to_payroll`, `cancel_business_payroll_subscription`,
+`enable_practice_business_payroll` or `disable_practice_business_payroll`.
+These require `api:write`, the relevant admin role and a reviewed
+`expected_version`. Starting incurs monthly fees; stopping takes effect
+immediately. Practice actions change only the named client's agreement; the
+practice remains the payer and its suspension is shared across clients.
 
 Interpret payroll agreement status using the appropriate vocabulary:
 
