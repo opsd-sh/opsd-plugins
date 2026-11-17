@@ -123,6 +123,8 @@ The ZIP is an initial package, not a completed public catalogue submission.
 - `list_business_invitations` and `list_practice_invitations` list pending,
   unexpired invitations received by the connected account.
 - `get_business_payroll_subscription` reads a standalone business's payroll agreement and suspension.
+- `subscribe_business_to_payroll` starts or restarts a standalone payroll agreement after checking the reviewed version and payment setup.
+- `cancel_business_payroll_subscription` cancels a standalone payroll agreement immediately, checking the reviewed version and retaining billing history.
 - `get_practice_business_payroll` reads a practice client's payroll enablement and shared suspension.
 - `list_business_invoices` and `list_practice_invoices` page through saved invoice summaries.
 - `list_business_invoice_lines` and `list_practice_invoice_lines` page through saved charges by business.
@@ -194,10 +196,11 @@ The billing skill distinguishes payroll agreement status from billing suspension
 and standalone subscriptions from practice client enablement. It also explains
 invoice pagination, saved payment statuses and client charge breakdowns. Four
 additional tools read payment setup live from Stripe, and two select a saved
-method as the payer’s default. All twelve billing tools require the relevant
-admin role. Selection guidance covers shared practice billing and uncertain
-provider outcomes. Payment methods, agreement status and suspension remain
-separate facts.
+method as the payer’s default. Two more tools start or cancel standalone payroll
+agreements. All fourteen billing tools require the relevant admin role. Guidance
+covers monthly fees, immediate cancellation, reviewed decision versions, shared
+practice billing and uncertain provider outcomes. Payment methods, agreement
+status and suspension remain separate facts.
 
 The payroll-setup skill helps select or create schemes and schedules within the
 chosen business, using IDs to match schedules to their schemes. It explains
@@ -244,8 +247,8 @@ existing rollover actions use reviewed versions. Starting or reconciling the
 final FPS can automatically send the new-year EPS. EPS acceptance completes the
 rollover and applies its saved next-year settings.
 
-There are seventy-seven tools: thirty-five read-only tools, seventeen creation tools,
-twenty-two update tools and three deletion tools.
+There are seventy-nine tools: thirty-five read-only tools, eighteen creation tools,
+twenty-three update tools and three deletion tools.
 OAuth requests `api:read`, `api:write`, and `hmrc:submit`. On the consent page,
 the user can approve any nonempty subset of these independent permissions. Lookups
 require `api:read`; payroll submission and retry links require `hmrc:submit`;
