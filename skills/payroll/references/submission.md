@@ -8,6 +8,12 @@ can be used directly. With Read, use the payroll details, preview and history
 tools to resolve the run and explain its current inputs and state. Never guess
 a version or silently refresh it after a conflict.
 
+If a late reporting reason applies, establish the reason with the user and pass
+its HMRC code as `late_reporting_reason` when creating the link. Do not guess a
+reason or default to “reasonable excuse”. Omit it when not applicable. The link
+saves the reason and the browser shows it read-only in the summary; changing it
+requires a new link. Retrying a frozen revision keeps its original reason.
+
 The tool creates a link only. Show the returned URL to the user and explain that
 they must sign in with the same Opsd account, review the selected payroll, enter
 their HMRC credentials directly on the Opsd page and choose “Finalize and submit”.
@@ -19,8 +25,8 @@ credentials or authorize later submissions.
 
 The link expires after 15 minutes and is tied to that account, run and version.
 Opening it does not submit anything. The browser shows the business, payment
-date, included employment count and total saved gross pay; it is not a net-pay
-or tax calculation preview. Finalization calculates payroll using the current
+date, included employment count, total saved gross pay and any late reporting
+reason; it is not a net-pay or tax calculation preview. Finalization calculates payroll using the current
 inputs and payroll history, following the same rules as the REST operation.
 
 On confirmation, the server checks current business access, the reviewed account,
