@@ -1,6 +1,6 @@
 ---
 name: members
-description: Inspect Opsd business or practice members and invitations, and create, accept, decline or cancel invitations. Use for account access questions, not employee payroll records.
+description: Inspect Opsd business or practice members and invitations, change member roles, and create, accept, decline or cancel invitations. Use for account access questions, not employee payroll records.
 ---
 
 Use the selected Opsd connection. For member lookups or outgoing invitations,
@@ -55,6 +55,12 @@ Member results contain user IDs, emails, email verification and roles. These
 are Opsd user accounts, not employees or employments. Use the employees skill
 for payroll records. Keep business roles (`admin`, `payroll_operator`) and
 practice roles (`admin`, `member`) distinct when reporting access.
+
+To change an existing member's role, read the
+[member role guide](references/member-roles.md) before calling
+`update_business_member` or `update_practice_member`. These require `api:write`
+and the relevant admin role, and preserve at least one admin. They change an
+existing membership; they do not invite, add or remove members.
 
 Outgoing invitation results contain invitation IDs, invitee emails, roles,
 `pending` status and expiry times. All invitation listings include only pending,
