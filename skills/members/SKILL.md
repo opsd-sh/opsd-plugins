@@ -1,6 +1,6 @@
 ---
 name: members
-description: Inspect Opsd business or practice members and invitations, change member roles, and create, accept, decline or cancel invitations. Use for account access questions, not employee payroll records.
+description: Inspect members, change roles, remove access and manage invitations for Opsd businesses or practices. Use for account access questions, not employee payroll records.
 ---
 
 Use the selected Opsd connection. For member lookups or outgoing invitations,
@@ -62,6 +62,13 @@ To change an existing member's role, read the
 and the relevant admin role, and preserve at least one admin. They change an
 existing membership; they do not invite, add or remove members.
 
+To remove an existing membership, read the
+[member removal guide](references/member-removal.md) before calling
+`remove_business_member` or `remove_practice_member`. These require `api:write`
+and the relevant admin role, including for self-removal. The last admin cannot
+be removed. Removing practice membership removes access through that practice
+to all its client businesses.
+
 Outgoing invitation results contain invitation IDs, invitee emails, roles,
 `pending` status and expiry times. All invitation listings include only pending,
 unexpired invitations; accepted, declined, cancelled and expired records are
@@ -88,7 +95,8 @@ not remove existing membership or recall an email.
 
 Keep failed lookups separate from empty results. A not-found response may mean
 missing or inaccessible; a forbidden response requires the appropriate admin
-role for member lookups and outgoing invitations. Reconnect with the missing
-Read or Write permission for insufficient scope; this cannot grant a missing
-admin role. For authentication failures, reconnect the selected Opsd connection.
-If a lookup fails, identify the gap in any combined results.
+role for member management, member lookups and outgoing invitations.
+Reconnect with the missing Read or Write permission for insufficient scope;
+this cannot grant a missing admin role. For authentication failures, reconnect
+the selected Opsd connection. If a lookup fails, identify the gap in any
+combined results.
