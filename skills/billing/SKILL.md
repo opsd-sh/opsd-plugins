@@ -1,6 +1,6 @@
 ---
 name: billing
-description: Check payroll subscriptions, practice client enablement, billing suspensions, invoice history and live payment-method setup in Opsd. Use for billing status and charge breakdowns, not payroll calculations or payment actions.
+description: Inspect payroll billing, invoices and saved payment methods in Opsd, and select a default payment method. Use for billing status, charge breakdowns and payment preferences, not payroll calculations.
 ---
 
 Use the selected Opsd connection. Resolve the business and, for a practice
@@ -29,11 +29,17 @@ when needed. Use returned public IDs.
   or `list_practice_payment_methods` with `practice_id`. Both require practice
   admin membership. Payment setup belongs to the practice, not each client.
 
-All ten tools require `api:read`. The business operational role from `get_business`
-does not identify whether access is direct or through a practice. Use the
+These ten read tools require `api:read`. The business operational role from
+`get_business` does not identify whether access is direct or through a practice. Use the
 practice tool for known practice clients, even when that role is `admin`.
 When the owning practice is unknown, match the business ID against clients
 returned by `list_practice_businesses` for the user's practices.
+
+To change the default payment method, read the
+[default selection guide](references/default-payment-method.md) before calling
+`set_business_default_payment_method` or `set_practice_default_payment_method`.
+These require `api:write` and the relevant admin role. Practice selection changes
+the shared payer's billing preference, not an individual client's setup.
 
 Interpret payroll agreement status using the appropriate vocabulary:
 
@@ -93,9 +99,9 @@ clients. Do not treat one client's charges as the whole practice invoice.
 
 Invoice reads remain available without an active payroll agreement, including
 after cancellation or during suspension. Invoice tools use saved local state;
-the billing-status and payment-method tools instead read Stripe live. None of
-these tools takes payment, changes agreements or payment setup, downloads PDFs,
-or reports a live outstanding balance. Do not request payment or HMRC credentials.
+billing-status and payment-method reads instead contact Stripe live. These reads
+do not take payment, change agreements or payment setup, download PDFs, or
+report a live outstanding balance. Do not request payment or HMRC credentials.
 
 `payment_method_saved` means Stripe currently records a default payment method.
 False can mean no default or missing/pending customer setup; it does not prove
@@ -123,6 +129,7 @@ inaccessible business or practice, a business outside the supplied practice,
 or an invoice outside the supplied payer. Use local invoice UUIDs from invoice
 listings, not provider IDs.
 Forbidden requires the appropriate admin role. For insufficient scope, reconnect
-with Read permission; reconnecting cannot grant a missing admin role. For an
-authentication failure, reconnect the selected Opsd connection. Identify failed
-lookups when reporting several businesses rather than implying complete results.
+with the required Read or Write permission; reconnecting cannot grant a missing
+admin role. For an authentication failure, reconnect the selected Opsd
+connection. Identify failed lookups when reporting several businesses rather
+than implying complete results.

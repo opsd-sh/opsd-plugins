@@ -128,6 +128,7 @@ The ZIP is an initial package, not a completed public catalogue submission.
 - `list_business_invoice_lines` and `list_practice_invoice_lines` page through saved charges by business.
 - `get_business_billing_status` and `get_practice_billing_status` check the current default payment method at Stripe.
 - `list_business_payment_methods` and `list_practice_payment_methods` read live saved methods and safe card summaries.
+- `set_business_default_payment_method` and `set_practice_default_payment_method` select an attached payment method as the payer’s invoice default, requiring the relevant admin role.
 - `create_paye_scheme` records a PAYE scheme and its initial tax-year settings within a business.
 - `create_pay_schedule` creates a monthly schedule under a scheme in that business.
 - `list_paye_schemes` lists a business's PAYE schemes and recorded settings.
@@ -192,9 +193,11 @@ memberships, and the risk of retrying after a user rejoins.
 The billing skill distinguishes payroll agreement status from billing suspension,
 and standalone subscriptions from practice client enablement. It also explains
 invoice pagination, saved payment statuses and client charge breakdowns. Four
-additional tools read payment setup live from Stripe. All ten billing tools
-require the relevant admin role. Payment methods, agreement status and
-suspension remain separate facts.
+additional tools read payment setup live from Stripe, and two select a saved
+method as the payer’s default. All twelve billing tools require the relevant
+admin role. Selection guidance covers shared practice billing and uncertain
+provider outcomes. Payment methods, agreement status and suspension remain
+separate facts.
 
 The payroll-setup skill helps select or create schemes and schedules within the
 chosen business, using IDs to match schedules to their schemes. It explains
@@ -241,8 +244,8 @@ existing rollover actions use reviewed versions. Starting or reconciling the
 final FPS can automatically send the new-year EPS. EPS acceptance completes the
 rollover and applies its saved next-year settings.
 
-There are seventy-five tools: thirty-five read-only tools, seventeen creation tools,
-twenty update tools and three deletion tools.
+There are seventy-seven tools: thirty-five read-only tools, seventeen creation tools,
+twenty-two update tools and three deletion tools.
 OAuth requests `api:read`, `api:write`, and `hmrc:submit`. On the consent page,
 the user can approve any nonempty subset of these independent permissions. Lookups
 require `api:read`; payroll submission and retry links require `hmrc:submit`;
