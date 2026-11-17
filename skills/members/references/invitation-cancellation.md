@@ -11,7 +11,8 @@ is not already identified, use the corresponding outgoing invitation list
 with Read permission and match the recipient and role within the intended
 business or practice. Ask if several candidates fit. Write alone is sufficient
 when both IDs are known. Do not use the cancellation tools to decline an
-invitation received by the connected account; declining is a different action.
+invitation received by the connected account; use the
+[decline guide](invitation-decline.md) for that action.
 
 Active pending invitations and expired open invitations can be cancelled.
 Listings omit expired invitations, but a known expired invitation ID can still

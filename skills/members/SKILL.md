@@ -1,6 +1,6 @@
 ---
 name: members
-description: Inspect Opsd business or practice members and invitations, and create, accept or cancel invitations. Use for account access questions, not employee payroll records.
+description: Inspect Opsd business or practice members and invitations, and create, accept, decline or cancel invitations. Use for account access questions, not employee payroll records.
 ---
 
 Use the selected Opsd connection. For member lookups or outgoing invitations,
@@ -26,6 +26,12 @@ To join through a received invitation, read the
 `api:write` and an invitation addressed to the connected account; existing
 membership or an admin role is not required. Acceptance grants the stored
 offered role. A practice invitation covers all its client businesses.
+
+To turn down a received invitation, read the
+[decline guide](references/invitation-decline.md) before calling
+`decline_business_invitation` or `decline_practice_invitation`. Both require
+`api:write` and the authenticated recipient. Declining closes the invitation
+without changing existing memberships.
 
 For members or invitations sent by an entity:
 
