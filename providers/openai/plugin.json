@@ -1,7 +1,7 @@
 {
   "name": "opsd",
-  "version": "0.1.5",
-  "description": "Find Opsd businesses and practices, or create standalone and practice-client businesses.",
+  "version": "0.1.6",
+  "description": "Prepare UK payroll, manage practice clients and track HMRC submissions.",
   "author": {
     "name": "Opsd"
   },
@@ -9,15 +9,15 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Opsd",
-    "shortDescription": "Find and create businesses.",
-    "longDescription": "Find standalone businesses, practices and their clients, look up membership roles, or create a standalone business or a client of an existing practice using your connected Opsd account.",
+    "shortDescription": "Run payroll for your business or practice clients.",
+    "longDescription": "Manage employees, pay schedules and billing. Prepare and review payroll runs, confirm HMRC submissions in your browser and check whether HMRC accepted them.",
     "developerName": "Opsd",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],
     "defaultPrompt": [
-      "Use Opsd to list my standalone businesses.",
-      "Use Opsd to list my practices and their clients.",
-      "Use Opsd to look up a business by its ID."
+      "Use {title} to help me prepare this month's payroll.",
+      "Use {title} to show the latest payroll run for a practice client.",
+      "Use {title} to check whether HMRC accepted my last submission."
     ],
     "composerIcon": "./assets/icon.svg",
     "logo": "./assets/icon.svg"

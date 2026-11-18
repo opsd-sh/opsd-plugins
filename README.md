@@ -94,10 +94,9 @@ codex plugin add opsd@opsd
 Restart Codex desktop or start a fresh CLI session after installation. Building
 does not install the package, register a marketplace or publish anything.
 
-The existing development package's OAuth login and both business tools were
-verified in Codex desktop. This new packaging adds the shared skill; production
-login and ChatGPT web testing remain deferred until a production user exists.
-The ZIP is an initial package, not a completed public catalogue submission.
+In development, Codex desktop has been used to run payroll for a standalone
+business and a practice client, including browser confirmation and retry after
+an HMRC rejection. Signed-in production testing is pending a production user.
 
 ## Tools and authentication
 
@@ -266,11 +265,9 @@ The listing's Read and Write capabilities describe the available tools; the
 token's granted scopes determine which operations it can perform. OAuth endpoints
 and CIMD support are discovered from Opserver; credentials are not packaged.
 
-Version 0.1.5 adds practice discovery guidance. Deploy the corresponding Opserver
-practice tools to the target environment before testing those workflows.
-The existing OAuth scopes and connection identities are unchanged. If practice
-tools are unavailable, the skill reports that limit and can still look up a
-known client business ID with `get_business`.
+Version 0.1.6 includes guidance on payroll preparation, HMRC submission and
+recovery, practice clients, membership and billing. Starter prompts use the
+display name of the package, such as Opsd or Opsd Development.
 
 The icon is the existing Opsd favicon from `www/public/favicon.svg`.
 

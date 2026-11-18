@@ -64,6 +64,10 @@ class PackageTests(unittest.TestCase):
                 self.assertNotIn(b"api.dev.opsd.sh", archive.read(name))
 
     def test_environment_changes_identity_without_changing_shared_files(self):
+        template_path = self.source / "providers/openai/plugin.json"
+        template = packager.read_json(template_path)
+        template["interface"]["defaultPrompt"] = ["Show my latest payroll run in {title}."]
+        packager.write_json(template_path, template)
         config = packager.read_json(self.source / "production.json")
         config.update(
             name="opsd-test", title="Opsd Test", mcp_url="https://test.example.com/mcp",
@@ -75,6 +79,7 @@ class PackageTests(unittest.TestCase):
         plugin = self.output / "plugins/opsd-test"
         manifest = packager.read_json(plugin / ".codex-plugin/plugin.json")
         self.assertEqual(manifest["interface"]["displayName"], "Opsd Test")
+        self.assertEqual(manifest["interface"]["defaultPrompt"], ["Show my latest payroll run in Opsd Test."])
         mcp = packager.read_json(plugin / ".mcp.json")
         self.assertEqual(set(mcp["mcpServers"]), {"opsd-test"})
         self.assertEqual(mcp["mcpServers"]["opsd-test"]["url"], config["mcp_url"])
@@ -87,6 +92,8 @@ class PackageTests(unittest.TestCase):
 
         production_output = self.directory / "production"
         packager.build(self.source / "production.json", production_output)
+        production_manifest = packager.read_json(production_output / "plugins/opsd/.codex-plugin/plugin.json")
+        self.assertEqual(production_manifest["interface"]["defaultPrompt"], ["Show my latest payroll run in Opsd."])
         production_mcp = packager.read_json(
             production_output / "plugins/opsd/.mcp.json"
         )

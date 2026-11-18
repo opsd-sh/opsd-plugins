@@ -98,9 +98,8 @@ def build(config_path, output):
     manifest["name"] = config["name"]
     manifest["interface"]["displayName"] = config["title"]
     manifest["interface"]["defaultPrompt"] = [
-        f"Use {config['title']} to list my standalone businesses.",
-        f"Use {config['title']} to list my practices and their clients.",
-        f"Use {config['title']} to look up a business by its ID.",
+        prompt.replace("{title}", config["title"])
+        for prompt in manifest["interface"]["defaultPrompt"]
     ]
     mcp = read_json(ROOT / "providers/openai/mcp.json")
     server = mcp["mcpServers"].pop("opsd")
