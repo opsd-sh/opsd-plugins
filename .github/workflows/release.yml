@@ -1,0 +1,82 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - run: make test
+      - run: make build
+      - name: Check the release tag against the packaged version
+        if: github.event_name == 'push'
+        run: |
+          version=$(unzip -p dist/openai/opsd.zip .codex-plugin/plugin.json | jq -er .version)
+          number='(0|[1-9][0-9]*)'
+          if [[ ! $version =~ ^$number\.$number\.$number$ || $GITHUB_REF_NAME != "v$version" ]]; then
+            echo "::error::Expected a stable release tag matching plugin version $version, got $GITHUB_REF_NAME"
+            exit 1
+          fi
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: openai-plugin
+          path: dist/openai/opsd.zip
+          if-no-files-found: error
+
+  publish:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-24.04
+    concurrency:
+      group: publish-openai-plugin
+      queue: max
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: openai-plugin
+      - uses: aws-actions/configure-aws-credentials@ec61189d14ec14c8efccab744f656cffd0e33f37 # v6.1.0
+        with:
+          aws-region: eu-west-2
+          role-to-assume: arn:aws:iam::091833700814:role/application/github-opsd-plugins-release
+      - name: Publish the production ZIP
+        shell: bash
+        run: |
+          bucket=$(aws ssm get-parameter --name /opsd/plugins/release/bucket_name --query Parameter.Value --output text)
+          distribution=$(aws ssm get-parameter --name /opsd/plugins/release/cloudfront_distribution_id --query Parameter.Value --output text)
+          prefix=plugins/openai
+          key="$prefix/releases/$GITHUB_REF_NAME/opsd.zip"
+          published=$(aws s3api list-objects-v2 --bucket "$bucket" --prefix "$prefix/releases/" |
+            jq -r '.Contents[]?.Key | capture("/(?<tag>v[0-9]+\\.[0-9]+\\.[0-9]+)/opsd\\.zip$").tag')
+
+          if grep -Fxq "$GITHUB_REF_NAME" <<< "$published"; then
+            revision=$(aws s3api head-object --bucket "$bucket" --key "$key" --query Metadata.revision --output text)
+            if [[ $revision != "$GITHUB_SHA" ]]; then
+              echo "::error::A different revision already published $key"
+              exit 1
+            fi
+          else
+            aws s3api put-object --bucket "$bucket" --key "$key" --body opsd.zip \
+              --if-none-match '*' --metadata "revision=$GITHUB_SHA" \
+              --content-type application/zip --content-disposition 'attachment; filename="opsd.zip"' \
+              --cache-control 'public,max-age=31536000,immutable'
+          fi
+
+          # An older tag can finish later. Always promote the newest published ZIP.
+          latest=$(printf '%s\n' "$published" "$GITHUB_REF_NAME" | sort -V | tail -n 1)
+          aws s3api copy-object --bucket "$bucket" --key "$prefix/opsd.zip" \
+            --copy-source "$bucket/$prefix/releases/$latest/opsd.zip" --metadata-directive REPLACE \
+            --content-type application/zip --content-disposition 'attachment; filename="opsd.zip"' \
+            --cache-control 'public,max-age=300'
+          aws cloudfront create-invalidation --distribution-id "$distribution" --paths "/$prefix/opsd.zip"

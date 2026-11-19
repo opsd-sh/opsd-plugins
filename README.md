@@ -1,7 +1,6 @@
 # Opsd plugins
 
-Shared skills, assets and provider packaging for Opsd. This repository is intended
-to become public later; this first version is local and has not been published.
+Shared skills, assets and provider packaging for Opsd.
 The only provider currently implemented is OpenAI (ChatGPT and Codex).
 
 Opserver handles authentication, permissions and business operations. These
@@ -80,6 +79,20 @@ distinct when installed together.
 The OpenAI package uses the Codex compatibility format already tested with
 Codex CLI 0.167.0. That version discovered the manifest but not the MCP connection
 when we previously tried the portable root `plugin.json` / `mcp.json` format.
+
+## Production downloads
+
+Run the **Release** workflow manually to test and build the production ZIP for
+inspection in the `openai-plugin` Actions artifact. To publish, push an annotated
+tag such as `v0.1.6` on the release commit. The tag must match the three-part
+version in `providers/openai/plugin.json`.
+
+The workflow uploads `opsd.zip` to
+`https://downloads.opsd.sh/plugins/openai/releases/<tag>/opsd.zip`.
+The customer download at `https://downloads.opsd.sh/plugins/openai/opsd.zip`
+serves the highest published version. Rerunning the same tag reuses its original
+ZIP. The AWS role and download destinations belong to the production downloads
+Terraform stack in `opsd-sh/infra`.
 
 ## Local installation
 
