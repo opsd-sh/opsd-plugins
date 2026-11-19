@@ -20,12 +20,13 @@ class PackageTests(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.directory = Path(self.temp.name)
         self.output = self.directory / "output"
-        self.source = self.directory / "source"
+        repo = self.directory / "source"
+        self.source = repo / packager.PLUGIN_PATH
+        self.config = repo / "production.json"
         # Use a clean fixture so local caches and excluded files cannot change
         # the expected package contents or require writes to the real checkout.
         for name in (
-            "production.json", "providers/openai/plugin.json",
-            "providers/openai/mcp.json", "skills/businesses/SKILL.md",
+            ".codex-plugin/plugin.json", ".mcp.json", "skills/businesses/SKILL.md",
             "skills/members/SKILL.md", "skills/billing/SKILL.md",
             "skills/payroll-setup/SKILL.md",
             "skills/employees/SKILL.md",
@@ -34,13 +35,17 @@ class PackageTests(unittest.TestCase):
         ):
             destination = self.source / name
             destination.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(ROOT / name, destination)
-        root_patch = patch.object(packager, "ROOT", self.source)
+            shutil.copy2(ROOT / packager.PLUGIN_PATH / name, destination)
+        marketplace = repo / packager.MARKETPLACE_PATH
+        marketplace.parent.mkdir(parents=True)
+        shutil.copy2(ROOT / packager.MARKETPLACE_PATH, marketplace)
+        shutil.copy2(ROOT / "production.json", self.config)
+        root_patch = patch.object(packager, "ROOT", repo)
         root_patch.start()
         self.addCleanup(root_patch.stop)
 
     def test_production_archive_is_self_contained(self):
-        packager.build(self.source / "production.json", self.output)
+        packager.build(self.config, self.output)
         with ZipFile(self.output / "opsd.zip") as archive:
             expected = {".codex-plugin/plugin.json", ".mcp.json"}
             for directory in ("skills", "assets"):
@@ -51,6 +56,8 @@ class PackageTests(unittest.TestCase):
             self.assertEqual(set(archive.namelist()), expected)
             for name in expected - {".codex-plugin/plugin.json", ".mcp.json"}:
                 self.assertEqual(archive.read(name), (self.source / name).read_bytes())
+            for name in (".codex-plugin/plugin.json", ".mcp.json"):
+                self.assertEqual(json.loads(archive.read(name)), packager.read_json(self.source / name))
             mcp = json.loads(archive.read(".mcp.json"))
             self.assertEqual(mcp["mcpServers"]["opsd"]["url"], "https://api.opsd.sh/mcp")
             self.assertEqual(
@@ -63,12 +70,18 @@ class PackageTests(unittest.TestCase):
             for name in archive.namelist():
                 self.assertNotIn(b"api.dev.opsd.sh", archive.read(name))
 
+        marketplace = packager.read_json(ROOT / packager.MARKETPLACE_PATH)
+        self.assertEqual(packager.read_json(self.output / packager.MARKETPLACE_PATH), marketplace)
+        entry, = marketplace["plugins"]
+        self.assertEqual(entry["source"], {"source": "local", "path": "./plugins/opsd"})
+        self.assertEqual(entry["name"], manifest["name"])
+
     def test_environment_changes_identity_without_changing_shared_files(self):
-        template_path = self.source / "providers/openai/plugin.json"
+        template_path = self.source / ".codex-plugin/plugin.json"
         template = packager.read_json(template_path)
-        template["interface"]["defaultPrompt"] = ["Show my latest payroll run in {title}."]
+        template["interface"]["defaultPrompt"] = ["Show my latest payroll run in Opsd."]
         packager.write_json(template_path, template)
-        config = packager.read_json(self.source / "production.json")
+        config = packager.read_json(self.config)
         config.update(
             name="opsd-test", title="Opsd Test", mcp_url="https://test.example.com/mcp",
             marketplace_name="opsd-test", marketplace_title="Opsd Test Plugins",
@@ -91,7 +104,7 @@ class PackageTests(unittest.TestCase):
             self.assertEqual(json.loads(archive.read(".mcp.json")), mcp)
 
         production_output = self.directory / "production"
-        packager.build(self.source / "production.json", production_output)
+        packager.build(self.config, production_output)
         production_manifest = packager.read_json(production_output / "plugins/opsd/.codex-plugin/plugin.json")
         self.assertEqual(production_manifest["interface"]["defaultPrompt"], ["Show my latest payroll run in Opsd."])
         production_mcp = packager.read_json(
@@ -114,10 +127,10 @@ class PackageTests(unittest.TestCase):
         self.assertEqual((self.output / marketplace["plugins"][0]["source"]["path"]).resolve(), plugin)
 
     def test_rebuild_removes_stale_generated_files(self):
-        packager.build(self.source / "production.json", self.output)
+        packager.build(self.config, self.output)
         stale = self.output / "plugins/opsd/skills/removed.md"
         stale.write_text("Removed skill")
-        packager.build(self.source / "production.json", self.output)
+        packager.build(self.config, self.output)
         self.assertFalse(stale.exists())
         with ZipFile(self.output / "opsd.zip") as archive:
             self.assertNotIn("skills/removed.md", archive.namelist())
@@ -127,15 +140,15 @@ class PackageTests(unittest.TestCase):
         sentinel = self.output / "keep.txt"
         sentinel.write_text("User file")
         with self.assertRaises(ValueError):
-            packager.build(self.source / "production.json", self.output)
+            packager.build(self.config, self.output)
         alias = self.directory / "alias"
         alias.symlink_to(self.output, target_is_directory=True)
         with self.assertRaises(ValueError):
-            packager.build(self.source / "production.json", alias)
+            packager.build(self.config, alias)
         self.assertEqual(sentinel.read_text(), "User file")
 
     def test_rejects_invalid_environment_before_replacing_output(self):
-        packager.build(self.source / "production.json", self.output)
+        packager.build(self.config, self.output)
         archive = self.output / "opsd.zip"
         original = archive.read_bytes()
         for field, value in [
@@ -143,7 +156,7 @@ class PackageTests(unittest.TestCase):
             ("mcp_url", "https://token@example.com/mcp"), ("title", ""),
         ]:
             with self.subTest(field=field, value=value):
-                config = packager.read_json(self.source / "production.json")
+                config = packager.read_json(self.config)
                 config[field] = value
                 config_path = self.directory / "invalid.json"
                 packager.write_json(config_path, config)
@@ -154,7 +167,7 @@ class PackageTests(unittest.TestCase):
     def test_refuses_output_inside_shared_content(self):
         for directory in ("skills", "assets"):
             with self.subTest(directory=directory), self.assertRaises(ValueError):
-                packager.build(self.source / "production.json", self.source / directory / "build-output")
+                packager.build(self.config, self.source / directory / "build-output")
 
     def test_excludes_local_files_from_directory_and_archive(self):
         excluded = [
@@ -186,7 +199,7 @@ class PackageTests(unittest.TestCase):
         script = "skills/businesses/scripts/helper.py"
         (self.source / script).chmod(0o755)
 
-        packager.build(self.source / "production.json", self.output)
+        packager.build(self.config, self.output)
         plugin = self.output / "plugins/opsd"
         with ZipFile(self.output / "opsd.zip") as archive:
             for name in excluded:
@@ -202,7 +215,7 @@ class PackageTests(unittest.TestCase):
         skill = self.source / "skills/businesses"
         (skill / "icon.svg").symlink_to("../../assets/icon.svg")
         (skill / "shared-assets").symlink_to("../../assets", target_is_directory=True)
-        packager.build(self.source / "production.json", self.output)
+        packager.build(self.config, self.output)
         icon = (self.source / "assets/icon.svg").read_bytes()
         with ZipFile(self.output / "opsd.zip") as archive:
             for name in ("skills/businesses/icon.svg", "skills/businesses/shared-assets/icon.svg"):
@@ -220,7 +233,7 @@ class PackageTests(unittest.TestCase):
         (skill / "alias.txt").symlink_to(".env.local")
         (skill / "alias-directory").symlink_to("__pycache__", target_is_directory=True)
         (skill / "alias-file.txt").symlink_to("__pycache__/data.txt")
-        packager.build(self.source / "production.json", self.output)
+        packager.build(self.config, self.output)
         with ZipFile(self.output / "opsd.zip") as archive:
             for name in ("alias.txt", "alias-directory", "alias-file.txt"):
                 path = f"skills/businesses/{name}"
@@ -228,7 +241,7 @@ class PackageTests(unittest.TestCase):
                 self.assertFalse(any(entry.startswith(path) for entry in archive.namelist()))
 
     def test_external_links_fail_without_replacing_previous_package(self):
-        packager.build(self.source / "production.json", self.output)
+        packager.build(self.config, self.output)
         original = (self.output / "opsd.zip").read_bytes()
         outside_file = self.directory / "outside.txt"
         outside_file.write_text("Synthetic external fixture")
@@ -244,7 +257,7 @@ class PackageTests(unittest.TestCase):
                     link.symlink_to(target, target_is_directory=target.is_dir())
                     try:
                         with self.assertRaisesRegex(ValueError, "outside skills/ and assets/"):
-                            packager.build(self.source / "production.json", self.output)
+                            packager.build(self.config, self.output)
                     finally:
                         link.unlink()
                     self.assertEqual((self.output / "opsd.zip").read_bytes(), original)
@@ -255,11 +268,11 @@ class PackageTests(unittest.TestCase):
         assets.rename(moved)
         assets.symlink_to(moved, target_is_directory=True)
         with self.assertRaisesRegex(ValueError, "outside skills/ and assets/"):
-            packager.build(self.source / "production.json", self.output)
+            packager.build(self.config, self.output)
         self.assertFalse(self.output.exists())
 
     def test_broken_links_and_cycles_preserve_previous_package(self):
-        packager.build(self.source / "production.json", self.output)
+        packager.build(self.config, self.output)
         original = (self.output / "opsd.zip").read_bytes()
         skill = self.source / "skills/businesses"
         for name, target in (
@@ -272,7 +285,7 @@ class PackageTests(unittest.TestCase):
                 link.symlink_to(target)
                 try:
                     with self.assertRaises(ValueError):
-                        packager.build(self.source / "production.json", self.output)
+                        packager.build(self.config, self.output)
                 finally:
                     link.unlink()
                 self.assertEqual((self.output / "opsd.zip").read_bytes(), original)

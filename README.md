@@ -6,29 +6,42 @@ The only provider currently implemented is OpenAI (ChatGPT and Codex).
 Opserver handles authentication, permissions and business operations. These
 packages connect to its existing MCP server.
 
+## Install in Codex
+
+In the ChatGPT desktop app, open **Plugins** and choose **Add plugin marketplace**.
+Enter `opsd-sh/opsd-plugins`, open **Opsd** in the new marketplace, and select
+**Install**. Connect your Opsd account when prompted.
+
+From the Codex CLI, run:
+
+```sh
+codex plugin marketplace add opsd-sh/opsd-plugins
+codex plugin add opsd@opsd
+```
+
+To ask Codex to do the installation for you, paste this into a Codex chat:
+
+> Install the Opsd plugin from the opsd-sh/opsd-plugins GitHub marketplace
+> using the Codex CLI, then help me connect my Opsd account.
+
+Start a new Codex chat after installing.
+
 ## Source layout
 
 ```text
-assets/icon.svg                 Shared Opsd icon
-skills/businesses/SKILL.md       Business discovery and creation skill
-skills/members/SKILL.md          Members and sent or received invitations
-skills/billing/SKILL.md          Agreements, invoices and live payment setup
-skills/payroll-setup/SKILL.md    Payroll setup and practice HMRC reporting
-skills/employees/SKILL.md        Employee and employment discovery
-skills/payroll/SKILL.md          Draft payments, previews and payroll history
-skills/tax-year-rollovers/SKILL.md  Tax-year rollover approval, progress and recovery
-providers/openai/plugin.json     OpenAI manifest defaults
-providers/openai/mcp.json        OpenAI MCP connection defaults
-production.json                 Production identity and endpoint
-Makefile                        Build and test commands
-scripts/build.py                Shared packaging script
-tests/test_build.py              Packaging checks
+.agents/plugins/marketplace.json          Codex marketplace catalogue
+plugins/opsd/.codex-plugin/plugin.json    Production plugin manifest
+plugins/opsd/.mcp.json                    Production MCP connection
+plugins/opsd/skills/                      Shared skills and their reference files
+plugins/opsd/assets/icon.svg              Shared Opsd icon
+production.json                           Production build settings
+scripts/build.py                          Shared packaging script
+tests/test_build.py                       Packaging checks
 ```
 
-The skills and icon are maintained here once. The private `opsd-plugins-dev`
-repository supplies development settings and invokes this same build script.
-Future providers can add their own packaging under `providers/` while reusing
-the shared content; their formats are not implemented yet.
+Codex installs `plugins/opsd/` directly from the repository. The ZIP build
+and the private `opsd-plugins-dev` build read the skills and icon from that
+same directory.
 
 ## Build
 
@@ -67,7 +80,7 @@ environment directories, `.git` metadata, and common editor metadata and backup
 files at every level. The exact patterns are in `scripts/build.py`; these are
 explicit packaging rules, not an interpretation of `.gitignore`.
 
-Links within `skills/` and `assets/` are copied as ordinary files and directories.
+Links within the plugin’s `skills/` and `assets/` are copied as ordinary files and directories.
 Links to excluded content are also excluded. Links outside those directories,
 broken links and directory cycles fail the build, leaving the previous package
 in place.
@@ -85,7 +98,7 @@ when we previously tried the portable root `plugin.json` / `mcp.json` format.
 Run the **Release** workflow manually to test and build the production ZIP for
 inspection in the `openai-plugin` Actions artifact. To publish, push an annotated
 tag such as `v0.1.6` on the release commit. The tag must match the three-part
-version in `providers/openai/plugin.json`.
+version in `plugins/opsd/.codex-plugin/plugin.json`.
 
 The workflow uploads `opsd.zip` to
 `https://downloads.opsd.sh/plugins/openai/releases/<tag>/opsd.zip`.
@@ -94,7 +107,7 @@ serves the highest published version. Rerunning the same tag reuses its original
 ZIP. The AWS role and download destinations belong to the production downloads
 Terraform stack in `opsd-sh/infra`.
 
-## Local installation
+## Test a local build
 
 This package connects to production. Use the private development repository for
 development accounts and data.
@@ -293,7 +306,7 @@ make test
 The checks cover self-contained packages, shared file reuse, content exclusions,
 symlink handling, rebuilding, output protection and invalid configuration.
 Increment the version in
-`providers/openai/plugin.json` when releasing package changes.
+`plugins/opsd/.codex-plugin/plugin.json` when releasing package changes.
 
 See the [OpenAI packaging documentation](https://developers.openai.com/plugins/build/plugins)
 for the supported manifest and marketplace formats.

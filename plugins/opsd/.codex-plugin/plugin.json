@@ -1,6 +1,6 @@
 {
   "name": "opsd",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Prepare UK payroll, manage practice clients and track HMRC submissions.",
   "author": {
     "name": "Opsd"
@@ -15,9 +15,9 @@
     "category": "Productivity",
     "capabilities": ["Read", "Write"],
     "defaultPrompt": [
-      "Use {title} to help me prepare this month's payroll.",
-      "Use {title} to show the latest payroll run for a practice client.",
-      "Use {title} to check whether HMRC accepted my last submission."
+      "Use Opsd to help me prepare this month's payroll.",
+      "Use Opsd to show the latest payroll run for a practice client.",
+      "Use Opsd to check whether HMRC accepted my last submission."
     ],
     "composerIcon": "./assets/icon.svg",
     "logo": "./assets/icon.svg"

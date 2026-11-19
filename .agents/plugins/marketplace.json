@@ -1,0 +1,20 @@
+{
+  "name": "opsd",
+  "interface": {
+    "displayName": "Opsd Plugins"
+  },
+  "plugins": [
+    {
+      "name": "opsd",
+      "source": {
+        "source": "local",
+        "path": "./plugins/opsd"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

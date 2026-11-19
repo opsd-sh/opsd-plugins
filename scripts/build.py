@@ -13,6 +13,8 @@ from zipfile import ZIP_DEFLATED, ZipFile
 
 
 ROOT = Path(__file__).resolve().parents[1]
+PLUGIN_PATH = Path("plugins/opsd")
+MARKETPLACE_PATH = Path(".agents/plugins/marketplace.json")
 MARKER = ".opsd-plugin-build"
 CONTENT_DIRECTORIES = ("skills", "assets")
 EXCLUDED_PATTERNS = (
@@ -43,10 +45,11 @@ def copy_content(source, destination, parents=()):
         resolved = source.resolve(strict=True)
     except (OSError, RuntimeError) as error:
         raise ValueError(f"Cannot resolve package content: {source}") from error
+    plugin_root = ROOT / PLUGIN_PATH
     relative = next((
-        resolved.relative_to(ROOT / directory)
+        resolved.relative_to(plugin_root / directory)
         for directory in CONTENT_DIRECTORIES
-        if resolved.is_relative_to(ROOT / directory)
+        if resolved.is_relative_to(plugin_root / directory)
     ), None)
     if relative is None:
         raise ValueError(f"Package content resolves outside skills/ and assets/: {source}")
@@ -88,33 +91,31 @@ def build(config_path, output):
     for source in (ROOT, config_path.resolve()):
         if output == source or output in source.parents:
             raise ValueError("Output must not contain source files")
-    for directory in (*CONTENT_DIRECTORIES, "providers", "scripts", "tests"):
+    for directory in ("plugins", ".agents", "scripts", "tests"):
         if ROOT / directory == output or ROOT / directory in output.parents:
             raise ValueError("Output must not be inside a source directory")
     if output.exists() and not (output / MARKER).is_file():
         raise ValueError(f"Refusing to replace a directory without {MARKER}: {output}")
 
-    manifest = read_json(ROOT / "providers/openai/plugin.json")
+    plugin_root = ROOT / PLUGIN_PATH
+    manifest = read_json(plugin_root / ".codex-plugin/plugin.json")
+    production_title = manifest["interface"]["displayName"]
     manifest["name"] = config["name"]
     manifest["interface"]["displayName"] = config["title"]
     manifest["interface"]["defaultPrompt"] = [
-        prompt.replace("{title}", config["title"])
+        prompt.replace(production_title, config["title"])
         for prompt in manifest["interface"]["defaultPrompt"]
     ]
-    mcp = read_json(ROOT / "providers/openai/mcp.json")
+    mcp = read_json(plugin_root / ".mcp.json")
     server = mcp["mcpServers"].pop("opsd")
     server["url"] = config["mcp_url"]
     mcp["mcpServers"][config["name"]] = server
-    marketplace = {
-        "name": config["marketplace_name"],
-        "interface": {"displayName": config["marketplace_title"]},
-        "plugins": [{
-            "name": config["name"],
-            "source": {"source": "local", "path": f"./plugins/{config['name']}"},
-            "policy": {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
-            "category": manifest["interface"]["category"],
-        }],
-    }
+    marketplace = read_json(ROOT / MARKETPLACE_PATH)
+    marketplace["name"] = config["marketplace_name"]
+    marketplace["interface"]["displayName"] = config["marketplace_title"]
+    entry, = marketplace["plugins"]
+    entry["name"] = config["name"]
+    entry["source"]["path"] = f"./plugins/{config['name']}"
 
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix=".opsd-build-", dir=output.parent) as temp:
@@ -123,8 +124,8 @@ def build(config_path, output):
         write_json(plugin / ".codex-plugin/plugin.json", manifest)
         write_json(plugin / ".mcp.json", mcp)
         for directory in CONTENT_DIRECTORIES:
-            copy_content(ROOT / directory, plugin / directory)
-        write_json(generated / ".agents/plugins/marketplace.json", marketplace)
+            copy_content(plugin_root / directory, plugin / directory)
+        write_json(generated / MARKETPLACE_PATH, marketplace)
         with ZipFile(generated / f"{config['name']}.zip", "w", ZIP_DEFLATED) as archive:
             for path in sorted(plugin.rglob("*")):
                 if path.is_file():
