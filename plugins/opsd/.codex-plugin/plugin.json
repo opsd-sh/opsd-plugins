@@ -9,7 +9,7 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Opsd",
-    "shortDescription": "Run UK payroll in chat",
+    "shortDescription": "Run payroll and submit to HMRC",
     "longDescription": "Run UK payroll in chat for your business or your clients. Ask Opsd to add an employee, prepare this month’s pay or show what each employee will take home. When you’re happy with the figures, approve the submission to HMRC in your browser.",
     "developerName": "Opsd",
     "category": "Productivity",

@@ -8,9 +8,7 @@ packages connect to its existing MCP server.
 
 ## Install in Codex
 
-In the ChatGPT desktop app, open **Plugins** and choose **Add plugin marketplace**.
-Enter `opsd-sh/opsd-plugins`, open **Opsd** in the new marketplace, and select
-**Install**. Connect your Opsd account when prompted.
+[Install Opsd in the ChatGPT desktop app](https://docs.opsd.sh/install-plugin/#add-the-plugin).
 
 From the Codex CLI, run:
 
