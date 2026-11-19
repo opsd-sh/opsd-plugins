@@ -9,8 +9,8 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Opsd",
-    "shortDescription": "Run payroll for your business or practice clients.",
-    "longDescription": "Manage employees, pay schedules and billing. Prepare and review payroll runs, confirm HMRC submissions in your browser and check whether HMRC accepted them.",
+    "shortDescription": "Run UK payroll in chat",
+    "longDescription": "Run UK payroll in chat for your business or your clients. Ask Opsd to add an employee, prepare this month’s pay or show what each employee will take home. When you’re happy with the figures, approve the submission to HMRC in your browser.",
     "developerName": "Opsd",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],
