@@ -17,6 +17,12 @@ Send only the requested fields, with `business_id` and `employment_id`:
   this is a default; existing run entries retain their stored hours band.
 - `ni_category`: the supplied category, currently A, B, C, H, J, M, V, X or Z.
   The server checks compatibility and payroll history; do not guess a category.
+- `ni_method`: for AL, supply `{"method":"AL","appointed_on":"2026-10-01"}`
+  with the actual appointment date. Check the director’s agreement, regular pay
+  pattern and usual pay above the Lower Earnings Limit for that period.
+  Use `{"method":"ordinary"}` for an explicit change to ordinary NI. Omission
+  keeps the current method. The server rejects changes that would alter
+  finalised payroll. NI category is a separate setting.
 - `start_date`: the actual date in YYYY-MM-DD, currently from 2026-04-06 through
   2027-04-05. Do not move the date to bypass validation.
 - `starter_information`: a complete replacement of the evidence object, using

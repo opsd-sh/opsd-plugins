@@ -71,7 +71,8 @@ change employment settings, recalculate a run or submit anything to HMRC.
 For employment creation, read [employment onboarding](references/employment-creation.md).
 `create_employment` links an existing employee to a scheme and schedule, records
 starter evidence and resolves initial tax settings. It requires explicit pay,
-hours, NI and loan declarations.
+hours, NI and loan declarations. For an AL director, collect the NI category
+and director’s appointment date and use the onboarding guidance to select the method.
 
 For employment edits, read [employment updates](references/employment-updates.md).
 `update_employment` changes payroll defaults or starter evidence while retaining

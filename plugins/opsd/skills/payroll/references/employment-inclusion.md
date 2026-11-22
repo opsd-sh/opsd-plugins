@@ -14,7 +14,8 @@ permission alone is sufficient when the IDs and intended change are known.
 - Inclusion adds the employment if absent, copying its current gross-pay and
   normal-weekly-hours defaults into a new payment. If already included, it
   preserves the existing payment and its overrides.
-- Exclusion removes this run's payment, including any pay and hours overrides.
+- Exclusion removes this run's payment, including any pay or hours overrides
+  and the final director payment decision.
   It preserves the employment record, other runs and frozen revisions. If the
   employment is already absent, there is no payment to remove.
 

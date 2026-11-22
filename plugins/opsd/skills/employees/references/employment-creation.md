@@ -29,6 +29,18 @@ Supply all of these fields:
   `not_applicable` as a fallback when a loan applies or the answer is unknown.
 - `starter_information`: one of the evidence forms below.
 
+For ordinary NI, omit `ni_method`. For a director using the alternative method,
+supply `"ni_method":{"method":"AL","appointed_on":"2026-10-01"}` with the actual
+appointment date and a separate `ni_category` such as `A`. Select AL when
+the director agrees, is paid regularly and normally earns more than the Lower
+Earnings Limit for that pay period. An occasional low payment can still use AL.
+Payments before the appointment use ordinary NI. The server checks the category
+against age on payday. Under 16 requires X, M and Z require an age under 21,
+and H requires an age under 25.
+If the operator needs the standard annual method (`AN`), explain that it is
+unsupported. If the connected tool lacks `ni_method`, report that limitation
+before creating the employment.
+
 Ask for required information not already established in the conversation. Do
 not infer declarations, fabricate P45 evidence or supply a guessed tax code.
 

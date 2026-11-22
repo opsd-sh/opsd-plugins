@@ -30,6 +30,11 @@ payroll-readiness check, and an empty schedule can produce an empty draft.
 For a requested override to an included payment, follow the
 [payment editing guidance](payment-updates.md).
 
+A new draft starts with the final director payment decision unanswered. For a
+regular AL payday before tax month 12, establish the operator’s decision when
+annual reassessment has yet to start. A £0 entry can still require an adjustment
+or FPS reporting. Keep it in the draft unless exclusion is appropriate.
+
 Report the returned run ID, payment date, draft status and employment count.
 The response is a summary, not a calculation. Use `get_payroll_run` for saved
 payments or `preview_payroll_run` for a calculation when needed for the user's
