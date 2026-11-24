@@ -16,7 +16,7 @@ before calling `create_payroll_run`. It covers automatic employment inclusion,
 copied payment defaults and uncertain outcomes. To change which employments are
 included, read [inclusion and exclusion guidance](references/employment-inclusion.md)
 before calling `include_payroll_run_employment` or `exclude_payroll_run_employment`.
-For changes to gross pay or working-hours band on one run, read
+For changes to gross pay, working-hours band or the final AL director payment decision, read
 [payment editing guidance](references/payment-updates.md)
 before calling `update_payroll_run_payment`. Use the employee skill for changes
 to employment defaults instead.
@@ -77,12 +77,20 @@ to employment IDs, use the [employee discovery skill](../employees/SKILL.md).
 `employment_count` counts included employments, not necessarily distinct people.
 
 Distinguish saved payment inputs from calculated results. The run's payments
-contain gross amounts and working-hours bands; `calculation` contains saved
+contain gross amounts, working-hours bands and any `final_director_payment` decision. The calculation contains saved
 amounts, calculation inputs, year-to-date figures and totals. These saved values
 belong to the run's revision and must not be replaced with current employment
 defaults. Money fields are integer pence; preserve negative tax amounts and
 convert to pounds for presentation. Employer NI is separate from deductions
 from employee pay. A null gross amount is unknown, not zero.
+
+For AL directors, `inputs.annual_director_ni` identifies an annual assessment.
+In each payment, `employee_ni_pence` is the employee NI assessed,
+`employee_ni_deducted_pence` is the amount taken from pay (negative for a refund),
+and `employer_funded_employee_ni_pence` is the shortfall covered by the employer.
+Use the returned `net_pay_pence` for take-home pay. Before submission, show any
+returned warnings about multiple paid jobs. The employer decides whether
+separate NI calculations are appropriate and can continue after the warning.
 
 A null `calculation` means this response has no saved calculation. In particular,
 reading a draft or reopened run with `get_payroll_run` does not calculate a

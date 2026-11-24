@@ -165,11 +165,14 @@ an HMRC rejection. Signed-in production testing is pending a production user.
 - `list_employees` and `get_employee` return employee personal details.
 - `create_employment` links an employee to a scheme and schedule and resolves initial tax settings from supplied starter evidence.
 - `update_employment` changes payroll defaults or starter evidence while preserving payroll-history and tax-code-notice restrictions.
+- `discard_employment` deletes an unused employment and its opening balances after removal from all drafts and before its first finalised payment.
+- `get_employment_payroll_import` reads the saved external payroll figures.
+- `amend_employment_payroll_import` corrects them before the first finalised payroll for the employment.
 - `apply_employment_tax_code_notice` records a received notice without replacing starter evidence or saved payroll history.
 - `list_employments` and `get_employment` return linked employment records and
   stored payroll settings.
 - `create_payroll_run` creates a draft and copies the schedule’s eligible employments and payment defaults.
-- `update_payroll_run_payment` changes gross pay or working-hours band on an included draft payment without changing employment defaults.
+- `update_payroll_run_payment` changes gross pay, working-hours band or the AL director’s final-payment decision on an included draft payment.
 - `include_payroll_run_employment` adds an employment with current payment defaults, preserving an existing payment when already included.
 - `exclude_payroll_run_employment` removes an employment's payment and overrides from a draft or reopened run.
 - `discard_payroll_run` permanently deletes an ordinary draft and its payments, checking the reviewed version.

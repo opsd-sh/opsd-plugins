@@ -52,10 +52,10 @@ preview can show different tax and totals for the current payment. The tool
 does not finalize payroll or submit anything to HMRC.
 
 Onboarding must be complete, and a closing tax year blocks application. A notice
-can otherwise be applied after finalized payroll. Applying one prevents later
-starter-evidence or start-date changes; ordinary pay and hours edits remain
-available subject to other restrictions. Do not edit other records to bypass
-a rejection.
+can otherwise be applied after finalized payroll. Applying one locks starter
+evidence. Before a local starter’s first finalised payment, the operator can
+still correct the start date on its own. This preserves the notice’s PAYE settings.
+See [employment updates](employment-updates.md).
 
 Report the employment ID, applied tax year, code, basis and applicable earlier-job
 amounts. Distinguish the applied settings from any unchanged saved payroll result.

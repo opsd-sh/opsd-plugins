@@ -1,12 +1,12 @@
 ---
 name: employees
-description: Find, create and update employees and employments in Opsd. Use for discovery, personal-detail maintenance, employment onboarding, payroll-setting changes and received HMRC tax-code notices.
+description: Find, create and update employees and employments in Opsd. Use for discovery, personal-detail maintenance, employment onboarding, deletion of unused employments, payroll-setting changes and received HMRC tax-code notices.
 ---
 
 Use the Opsd connection and business selected by the user or established in the
 conversation. If the business is unclear, use the [business discovery skill](../businesses/SKILL.md),
 including practice clients. Keep operations on that connection and business.
-Lookups require `api:read`; creation and updates require `api:write`.
+Lookups require `api:read`. Creating, editing and deleting records require `api:write`.
 Write alone is sufficient when the business, employee and requested details are
 known; a preliminary lookup is not required.
 
@@ -61,21 +61,34 @@ and ask before another creation attempt. Use the returned employee ID for
 later work and do not create another person just to add an employment.
 
 Employee updates retain the server's payroll protections. Changes can conflict with
-existing NI categories, a tax-year rollover in progress, or finalized payroll
-history. After finalized payroll, identity changes and changing or clearing an
-existing NI number are currently blocked; adding a missing NI number is still
-permitted unless another restriction applies. Explain the returned conflict
-without changing other records to bypass it. Employee maintenance does not
-change employment settings, recalculate a run or submit anything to HMRC.
+existing NI categories or a tax-year rollover in progress. If HMRC rejected the
+employee's first FPS or Opsd confirmed it was never sent, the operator can
+reopen the run and correct a detail such as a mistyped surname. The original
+revision keeps the name it used.
+
+Identity edits and changes to an existing NI number are blocked while any of the
+employee's payments is in a finalised or accepted run, or if any of their
+employments has imported payroll history. A missing NI number can still be added
+unless another restriction applies. Explain conflicts without changing other
+records to bypass them. Employee maintenance does not change employment settings,
+recalculate a run or submit anything to HMRC.
 
 For employment creation, read [employment onboarding](references/employment-creation.md).
 `create_employment` links an existing employee to a scheme and schedule, records
-starter evidence and resolves initial tax settings. It requires explicit pay,
-hours, NI and loan declarations.
+starter evidence or the opening balances for a continuing employment, and sets its current tax treatment. It requires explicit pay,
+hours, NI and loan declarations. For an AL director, collect the NI category
+and director’s appointment date and use the onboarding guidance to select the method.
 
 For employment edits, read [employment updates](references/employment-updates.md).
 `update_employment` changes payroll defaults or starter evidence while retaining
-payroll-history protections.
+payroll-history protections. For corrections to an imported payroll ID, last
+external payday or opening balances, use `amend_employment_payroll_import`.
+
+Use `discard_employment` when the operator asks to delete an employment created
+in error. Supply the business ID and employment ID. The employee is retained.
+Imported balances are deleted along with the employment. If a draft includes it,
+identify the run returned in the conflict so the operator can remove the employment.
+Any finalised payment for that employment permanently blocks deletion.
 
 For a received HMRC notice, read [tax-code notices](references/tax-code-notices.md).
 `apply_employment_tax_code_notice` records the supplied notice separately from

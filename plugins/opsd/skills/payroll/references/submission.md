@@ -25,8 +25,8 @@ credentials or authorize later submissions.
 
 The link expires after 15 minutes and is tied to that account, run and version.
 Opening it does not submit anything. The browser shows the business, payment
-date, included employment count, total saved gross pay and any late reporting
-reason; it is not a net-pay or tax calculation preview. Finalization calculates payroll using the current
+date, included employment count, total saved gross pay, payroll warnings and any late reporting
+reason. Use the preview for net pay and tax amounts. Finalization calculates payroll using the current
 inputs and payroll history, following the same rules as the REST operation.
 
 On confirmation, the server checks current business access, the reviewed account,

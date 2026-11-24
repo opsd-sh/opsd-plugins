@@ -1,9 +1,9 @@
 # Edit a payroll payment
 
-Use `update_payroll_run_payment` for a requested gross-pay or working-hours-band
-override on one included employment in a draft or reopened payroll run. Supply
+Use `update_payroll_run_payment` to edit one included employment in a draft or
+reopened payroll run. Supply
 `business_id`, `payroll_run_id` and `employment_id`, plus at least one of
-`gross_pay_pence` and `normal_weekly_hours_band`. The employment ID is not the
+`gross_pay_pence`, `normal_weekly_hours_band` and `final_director_payment`. The employment ID is not the
 employee ID; one person can have multiple employments.
 
 Use known IDs and inputs directly. When the target or amount is unclear, use
@@ -12,9 +12,9 @@ resolve it, or ask for the missing information. Business admins and payroll
 operators, including practice members, can edit payments. Write permission
 alone is sufficient for the edit.
 
-Both fields replace the saved input for this run. Omission preserves the other
-field; explicit null is invalid. Send only the requested changes. If both are
-provided, they are applied together or neither is applied.
+Each field replaces the saved input for this run. Send only the requested
+changes. Omitted fields keep their saved values. Explicit null is invalid.
+Changes sent together are applied together.
 
 - `gross_pay_pence` is the complete replacement gross amount in integer pence,
   from 0 through 99,999,999,999. For example, £2,500 is 250000 pence. For an
@@ -25,6 +25,11 @@ provided, they are applied together or neither is applied.
   hours paid in this run. Use `less_than_16`, `sixteen_to_less_than_24`,
   `twenty_four_to_less_than_30`, `thirty_or_more` or `other`. Other means there
   is no normal weekly working pattern; do not use it for missing information.
+- For an AL director, send `final_director_payment: true` for the last expected
+  payment in the tax year or directorship, or `false` for a regular payment.
+  Either value can be sent on its own. Ask the operator when the decision is
+  required and unknown. Tax month 12 and payments after an annual reassessment
+  in that tax year use annual NI automatically.
 
 The edit preserves employment defaults, other included payments and frozen
 revisions from previous submissions. Use `update_employment` for a requested
