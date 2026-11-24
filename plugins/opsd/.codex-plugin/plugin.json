@@ -1,6 +1,6 @@
 {
   "name": "opsd",
-  "version": "0.1.7",
+  "version": "0.1.9",
   "description": "Prepare UK payroll, manage practice clients and track HMRC submissions.",
   "author": {
     "name": "Opsd"

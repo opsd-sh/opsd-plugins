@@ -1,15 +1,34 @@
 ---
 name: payroll
-description: Create, edit or discard payroll drafts, reopen or cancel eligible runs, resume paused HMRC polling, preview calculations and inspect saved payments and submission history in Opsd. Arrange browser confirmation to submit or retry payroll, or resume reconciliation, with one-off HMRC credentials. Use for payroll preparation, submission and questions.
+description: Create, edit or discard payroll drafts, reopen or cancel eligible runs, resume paused HMRC polling, preview calculations, download individual payslips or a whole run as a ZIP, and inspect saved payments and submission history in Opsd. Arrange browser confirmation to submit or retry payroll, or resume reconciliation, with one-off HMRC credentials. Use for payroll preparation, submission and questions.
 ---
 
 Use the Opsd connection and business selected by the user or established in the
 conversation. If needed, resolve the business with the [business discovery skill](../businesses/SKILL.md),
 including practice clients. Draft creation, edits, deletion, reopening,
-cancellation, resuming polling and reconciliation links require `api:write`; the four read tools require `api:read`.
+cancellation, resuming polling and reconciliation links require `api:write`; the read tools require `api:read`.
 Write alone permits these operations when the required IDs and inputs are known.
 Creating a submission or retry link requires `hmrc:submit`; it does not require Read or
 Write when the business ID, run ID and reviewed version are already known.
+
+For one payslip, call `download_payslip` with the business ID, payroll run ID and
+employment ID. It requires `api:read` and an HMRC-accepted run. If the user names
+an employee, resolve their employment in the selected run. Ask which employment
+they mean if more than one matches. Return the download link on the Opsd API
+domain exactly as supplied, along with its expiry. The link grants access to anyone who holds it. Request a fresh
+link if it expires. A pending or reopened run has no downloadable payslip.
+The PDF covers monthly cash pay. Where pay depends on hours worked, the operator
+needs to provide those actual hours separately.
+
+For all payslips in one HMRC-accepted run, call `request_payslip_export` with
+the business ID and payroll run ID. It requires `api:read` and returns an
+`export_id` immediately. Call `get_payslip_export` with all three IDs.
+While the status is `preparing`, keep the ID and poll after a few seconds.
+When `ready`, return the ZIP link from `download.url` exactly as supplied
+along with `download.expires_at`. Anyone holding the link can download all
+payslips in the run. Checking a ready export again gives a fresh link.
+Request a new export if the previous one is `expired` or `failed`, and report
+a repeated failure to the operator.
 
 For draft creation, read [draft creation guidance](references/draft-creation.md)
 before calling `create_payroll_run`. It covers automatic employment inclusion,
