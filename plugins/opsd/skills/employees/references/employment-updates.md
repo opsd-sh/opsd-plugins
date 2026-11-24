@@ -35,21 +35,39 @@ and starter information; it never clears them. Null is invalid for the hours
 band. At least one non-null setting is required. Repeating the same values is
 allowed, subject to the current payroll protections.
 
-The server merges partial edits with the stored employment. A change to the
-start date or starter evidence resolves initial tax treatment again using that
-merged evidence. Report the returned treatment; do not set a tax code directly
-or use starter corrections to apply an HMRC notice. For a received notice, use
-`apply_employment_tax_code_notice` following [tax-code notices](tax-code-notices.md).
+Before the first finalised payment for a local starter, changing the start
+date or starter evidence updates the initial PAYE settings. If an HMRC notice
+has been applied, send only `start_date` to correct the date. Opserver validates
+it against the retained evidence and preserves the notice’s tax code, basis and
+previous-employment figures. The starter evidence is locked. For a received
+notice, use `apply_employment_tax_code_notice` following [tax-code notices](tax-code-notices.md).
 
-A closing tax year blocks edits. Actual start-date, starter-evidence and NI
-category changes are blocked after the employment appears in finalized payroll.
-An applied HMRC notice also blocks start-date and starter-evidence changes.
-A new start date cannot be later than the payment date of an existing draft or
-reopened run containing the job. Explain conflicts without changing other
-records to bypass them. Pay and hours can still be edited after finalized
-payroll; saved payroll results are retained.
+A closing tax year blocks edits. Once the employment has appeared in any finalised
+payroll, its start date and starter evidence are locked, including after reopening.
+An imported employment retains its original start date. A new start date cannot
+be later than the payday of a draft containing the employment.
+
+If HMRC rejected the first FPS for this employment or Opsd confirmed it was
+never sent, the operator can reopen the run and correct the NI category. The
+next preview and finalisation use the corrected letter. A finalised or accepted
+payment in another run for this employment, or its imported payroll history,
+still blocks the correction. Explain conflicts without changing other records to
+bypass them. Pay and hours remain editable for future drafts, and saved payroll
+results retain their original values.
 
 This tool cannot change the linked employee, PAYE scheme, schedule or loan
 declarations. It does not finalize payroll or submit to HMRC. Return the
 employment ID and the changed settings, distinguishing updated defaults from
 amounts already recorded in payroll runs.
+
+## Correcting a payroll import
+
+Use `get_employment_payroll_import` to read the saved external ID, last payday
+and opening figures. To amend them, call `amend_employment_payroll_import` with
+the business ID, employment ID and a `changes` object. For an ID typo, send
+only the corrected string, for example `{"payroll_id":"00024"}`. For an NI
+correction, supply the complete `ni` block. Supply `director_history` together
+with a payday correction if that payday changes the director history required.
+A conflict identifies the employment that holds the ID or the payroll run
+that froze the import. Existing drafts use the corrected figures at their next
+preview and finalisation.

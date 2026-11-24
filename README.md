@@ -165,6 +165,9 @@ an HMRC rejection. Signed-in production testing is pending a production user.
 - `list_employees` and `get_employee` return employee personal details.
 - `create_employment` links an employee to a scheme and schedule and resolves initial tax settings from supplied starter evidence.
 - `update_employment` changes payroll defaults or starter evidence while preserving payroll-history and tax-code-notice restrictions.
+- `discard_employment` deletes an unused employment and its opening balances after removal from all drafts and before its first finalised payment.
+- `get_employment_payroll_import` reads the saved external payroll figures.
+- `amend_employment_payroll_import` corrects them before the first finalised payroll for the employment.
 - `apply_employment_tax_code_notice` records a received notice without replacing starter evidence or saved payroll history.
 - `list_employments` and `get_employment` return linked employment records and
   stored payroll settings.

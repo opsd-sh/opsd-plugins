@@ -18,7 +18,7 @@ Supply all of these fields:
   `twenty_four_to_less_than_30`, `thirty_or_more` or `other`. Use the normal
   weekly pattern, not this month's paid hours. `other` means no normal pattern,
   not missing information.
-- `start_date`: YYYY-MM-DD, currently from 2026-04-06 through 2027-04-05. The
+- `start_date`: YYYY-MM-DD. New starters must start in 2026–27. A continuing employment can have an earlier start date. The
   scheme must be configured for 2026-27. Use the actual start date; do not move
   it into the supported year to bypass validation.
 - `ni_category`: currently A, B, C, H, J, M, V, X or Z. Use the supplied category;
@@ -27,7 +27,22 @@ Supply all of these fields:
 - `student_loan` and `postgraduate_loan`: both require an explicit
   `not_applicable` declaration. Deductions are not yet supported; do not use
   `not_applicable` as a fallback when a loan applies or the answer is unknown.
-- `starter_information`: one of the evidence forms below.
+- For a new job, supply `starter_information` using one of the forms below.
+- For a continuing job, supply `payroll_import` with the exact payroll ID
+  (preserve leading zeros), tax year, and date of the last payday included in
+  the old software's accepted figures for this employment. Use the current
+  tax code and basis. For cumulative PAYE, enter applicable earlier-job pay
+  and tax separately. Enter this employment's gross pay, taxable pay, income
+  tax, net pay, NI gross, employee and employer NI and the three NI earnings
+  bands in integer pence. The import supports one NI category. If the old
+  payroll reported other YTD items such as statutory pay, explain the limit.
+- For a director already paid under AL this tax year, also record whether the
+  appointment week was reported, whether an annual assessment was applied and
+  all six NI figures before appointment. Take these from the old payroll.
+- Opserver can take over for the first payday in a later UK tax month. If the
+  old system already made a payment in the proposed payday's tax month, ask for
+  the next eligible payday. A switch at the start of the tax year uses zero
+  current-year balances. Use the person's existing record when available.
 
 For ordinary NI, omit `ni_method`. For a director using the alternative method,
 supply `"ni_method":{"method":"AL","appointed_on":"2026-10-01"}` with the actual
@@ -67,7 +82,7 @@ its returned tax code, basis and applicable previous-job amounts; do not compute
 or override them yourself. Evidence totals and the resolved previous-job amounts
 can differ when the P45 is from an earlier tax year.
 
-Every successful call creates another employment, even with identical inputs.
+Repeated new-starter calls create separate employments. An import preserves one payroll ID per PAYE scheme. After an uncertain outcome, look up the employment by scheme and payroll ID before retrying.
 After a timeout or another uncertain creation outcome, investigate with Read
 access when available. A matching employee and scheme alone does not prove that
 the call succeeded: multiple jobs are allowed. Explain unresolved uncertainty
